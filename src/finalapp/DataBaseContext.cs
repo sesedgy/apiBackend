@@ -15,11 +15,13 @@ namespace finalapp
       
         public DbSet<User> Users { get; set; }
         public DbSet<Cookie> Cookies { get; set; }
+        public DbSet<Abiturient> Abiturients { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().ToTable("User");
             modelBuilder.Entity<Cookie>().ToTable("Cookie");
+            modelBuilder.Entity<Abiturient>().ToTable("Abiturient");
         }
     }
 
