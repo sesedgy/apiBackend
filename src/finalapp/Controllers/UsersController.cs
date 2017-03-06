@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Runtime.Serialization;
 using finalapp.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Query.ExpressionTranslators.Internal;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -19,6 +20,25 @@ namespace finalapp.Controllers
         public  UsersController(DataBaseContext context)
         {
             _context = context;
+        }
+
+        // GET: api/users/login=log&password=pass
+        [HttpPost]
+        public string Get(string login, string password)
+        {
+            User user;
+            using (var context = _context)
+            {
+                user = (from u in context.Users
+                        where u.Login == login
+                        where u.Password == password
+                        select u).SingleOrDefault();
+            }
+            if (user != null)
+            {
+                return CookieList.GetInstance().AddCookie(user);
+            }
+            return "null";
         }
 
         // GET: api/users/8e783c7e-717b-4efa-c067-08d455bbcfaa

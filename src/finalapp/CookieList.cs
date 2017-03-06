@@ -10,7 +10,7 @@ namespace finalapp
     {
 
         private static CookieList _instance;
-        private Dictionary<Guid,Cookie> _dictionary;
+        private readonly Dictionary<Guid,Cookie> _dictionary;
 
         private CookieList()
         {
@@ -24,7 +24,7 @@ namespace finalapp
             return _instance;
         }
 
-        public void AddCookie(User user)
+        public string AddCookie(User user)
         {
             var guid = new Guid();
             var cookie = new Cookie() {Id = guid, UserId = user.Id,};
@@ -50,37 +50,36 @@ namespace finalapp
                     break;
             }
             _dictionary.Add(guid, cookie);
+            return guid.ToString();
         }
 
         //TODO Возможна ошибка что отсутствующие роли будут вылетать, для этого надо будет исправить AddCookie
         public bool CheckCookie(string guid, string[] rights)
         {
-            if (_dictionary.ContainsKey(new Guid(guid)))
+            if (!_dictionary.ContainsKey(new Guid(guid))) return false;
+            var cookie = _dictionary[new Guid(guid)];
+            foreach (var t in rights)
             {
-                var cookie = _dictionary[new Guid(guid)];
-                for (int i = 0; i < rights.Length; i++)
+                switch (t)
                 {
-                    switch (rights[i])
-                    {
-                        case "IsAbiturient":
-                            if (cookie.IsAbiturient) { return true; }
-                            break;
-                        case "IsStudent":
-                            if (cookie.IsStudent) { return true; }
-                            break;
-                        case "IsStudentLeader":
-                            if (cookie.IsStudentLeader) { return true; }
-                            break;
-                        case "IsTeacher":
-                            if (cookie.IsTeacher) { return true; }
-                            break;
-                        case "IsWorker":
-                            if (cookie.IsWorker) { return true; }
-                            break;
-                        case "IsAdmin":
-                            if (cookie.IsAdmin) { return true; }
-                            break;
-                    } 
+                    case "IsAbiturient":
+                        if (cookie.IsAbiturient) { return true; }
+                        break;
+                    case "IsStudent":
+                        if (cookie.IsStudent) { return true; }
+                        break;
+                    case "IsStudentLeader":
+                        if (cookie.IsStudentLeader) { return true; }
+                        break;
+                    case "IsTeacher":
+                        if (cookie.IsTeacher) { return true; }
+                        break;
+                    case "IsWorker":
+                        if (cookie.IsWorker) { return true; }
+                        break;
+                    case "IsAdmin":
+                        if (cookie.IsAdmin) { return true; }
+                        break;
                 }
             }
             return false;
