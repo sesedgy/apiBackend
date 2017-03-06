@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Migrations;
@@ -15,12 +16,23 @@ using Configuration = PoiskIT.Okenit2.General.Migrations.Configuration;
 
 namespace GeneralModel.ViewModel
 {
-    class MainWindowViewModel:ViewModelBase
+    class MainWindowViewModel: INotifyPropertyChanged
     {
-        #region Variables
+        #region Properties
         private readonly Configuration _config;
         private DbMigrator _migrator;
-        private Thread _threadDbConnection;
+        private Thread _secondThread;
+        private const string LastVersion = " Последняя версия";
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void RaisePropertyChanged(string name)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(name));
+            }
+        }
 
         private string _connectionString;
         public string ConnectionString
@@ -29,32 +41,44 @@ namespace GeneralModel.ViewModel
             set
             {
                 _connectionString = value;
-                RaisePropertyChanged(() => ConnectionString);
+                RaisePropertyChanged("ConnectionStringTb");
             }
         }
 
-        private bool _btnIsDisabled;
-        public bool BtnIsDisabled
+        private string _providerName;
+        public string ProviderName
         {
-            get { return _btnIsDisabled; }
+            get { return _providerName; }
             set
             {
-                _btnIsDisabled = value;
-                RaisePropertyChanged("BtnIsDisabled");
+                _providerName = value;
+                RaisePropertyChanged("ProviderName");
             }
         }
 
-        private Visibility _progressBarVisible;
-        public Visibility ProgressBarVisible
+        private bool _updateDbToLastVersionBtnIsDisabled;
+        public bool UpdateDbToLastVersionBtnIsDisabled
         {
-            get { return _progressBarVisible; }
+            get { return _updateDbToLastVersionBtnIsDisabled; }
             set
             {
-                _progressBarVisible = value;
-                RaisePropertyChanged("ProgressBarVisible");
+                _updateDbToLastVersionBtnIsDisabled = value;
+                RaisePropertyChanged("UpdateDbToLastVersionBtnIsDisabled");
             }
         }
 
+        private Visibility _progressBarVisibility;
+        public Visibility ProgressBarVisibility
+        {
+            get { return _progressBarVisibility; }
+            set
+            {
+                _progressBarVisibility = value;
+                RaisePropertyChanged("ProgressBarVisibility");
+            }
+        }
+
+        //Выбранная строка с определенной миграцией
         private Migration _selectedMigration;
         public Migration SelectedMigration
         {
@@ -62,29 +86,31 @@ namespace GeneralModel.ViewModel
             set
             {
                 _selectedMigration = value;
-                RaisePropertyChanged(() => SelectedMigration);
+                RaisePropertyChanged("SelectedMigration");
             }
         }
 
-        private string _resultUpdate;
-        public string ResultUpdate
+        //Статус действий с БД
+        private string _dbConnectAndDbUpdateStatus;
+        public string DbConnectAndDbUpdateStatus
         {
-            get { return _resultUpdate; }
+            get { return _dbConnectAndDbUpdateStatus; }
             set
             {
-                _resultUpdate = value;
-                RaisePropertyChanged(() => ResultUpdate);
+                _dbConnectAndDbUpdateStatus = value;
+                RaisePropertyChanged("DbConnectAndDbUpdateStatus");
             }
         }
 
-        private List<Migration> _list;
-        public List<Migration> List
+        //Список доступных миграций
+        private List<Migration> _migrationList;
+        public List<Migration> MigrationList
         {
-            get { return _list; }
+            get { return _migrationList; }
             set
             {
-                _list = value;
-                RaisePropertyChanged(() => List);
+                _migrationList = value;
+                RaisePropertyChanged("MigrationList");
             }
         }
         #endregion
@@ -99,41 +125,43 @@ namespace GeneralModel.ViewModel
             UpdateDbToVersionCommand = new RelayCommand(UpdateDbToVersion);
 
             ConnectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString();
-            ProgressBarVisible = Visibility.Hidden;
-            BtnIsDisabled = true;
+            ProviderName = ConfigurationManager.ConnectionStrings["DefaultConnection"].ProviderName;
+            ProgressBarVisibility = Visibility.Hidden;
+            UpdateDbToLastVersionBtnIsDisabled = true;
         }
 
-        private void UpdateDb(object newVersionName)
+        private void UpdateDb(object targetMigrationName)
         {
-            ProgressBarVisible = Visibility.Visible;
-            BtnIsDisabled = false;
+            ProgressBarVisibility = Visibility.Visible;
+            UpdateDbToLastVersionBtnIsDisabled = false;
             try
             {
                 if (
-                    MessageBox.Show("Вы действительно желаете обновить БД до версии: " + newVersionName, "Обновление БД",
+                    MessageBox.Show("Вы действительно желаете обновить БД до версии: " + targetMigrationName, "Обновление БД",
                         MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
-                    _migrator.Update((string) newVersionName);
-                    ResultUpdate = "Обновление до версии: " + newVersionName + " успешно завершено";
+                    var updateDbTask = new Task(() => _migrator.Update((string) targetMigrationName));
+                    updateDbTask.Start();
+                    updateDbTask.Wait();                    
                     UpdateGrid();
+                    DbConnectAndDbUpdateStatus = "Обновление до версии: " + targetMigrationName + " успешно завершено";
                 }
             }
             catch (Exception error)
             {
-                ResultUpdate = "При обновлении возникла ошибка: " + error;
+                DbConnectAndDbUpdateStatus = "При обновлении возникла ошибка: " + error;
             }
             finally
             {
-                ProgressBarVisible = Visibility.Hidden;
-                BtnIsDisabled = true;
-                _threadDbConnection.Abort();
+                ProgressBarVisibility = Visibility.Hidden;
+                UpdateDbToLastVersionBtnIsDisabled = true;
             }
         }
 
         private void ConnectToDb()
         {
-            ProgressBarVisible = Visibility.Visible;
-            BtnIsDisabled = false;        
+            ProgressBarVisibility = Visibility.Visible;
+            UpdateDbToLastVersionBtnIsDisabled = false;        
             try
             {
                 //Проверка валидности ConnectionString
@@ -141,21 +169,20 @@ namespace GeneralModel.ViewModel
                 {
                     conn.Open();
                 }
-                _config.TargetDatabase = new DbConnectionInfo(ConnectionString, "System.Data.SqlClient");
+                _config.TargetDatabase = new DbConnectionInfo(ConnectionString, ProviderName);
                 _migrator = new DbMigrator(_config);
                 UpdateGrid();
-                ResultUpdate = "";
+                DbConnectAndDbUpdateStatus = "";
             }
             catch (Exception exception)
             {
-                List = new List<Migration>();
-                ResultUpdate = "При подключении к БД возникла ошибка: " + exception.Message;
+                MigrationList = new List<Migration>();
+                DbConnectAndDbUpdateStatus = "При подключении к БД возникла ошибка: " + exception.Message;
             }
             finally
             {
-                ProgressBarVisible = Visibility.Hidden;
-                BtnIsDisabled = true;
-                _threadDbConnection.Abort();
+                ProgressBarVisibility = Visibility.Hidden;
+                UpdateDbToLastVersionBtnIsDisabled = true;
             }
 
         }
@@ -163,21 +190,24 @@ namespace GeneralModel.ViewModel
         private void UpdateGrid()
         {
             var list = new List<Migration>();
+            var dbMigrationsList = _migrator.GetDatabaseMigrations().ToList();
             var listLocalMigrations = _migrator.GetLocalMigrations().ToList();
-            for (var i = _migrator.GetLocalMigrations().Count() - 1; i >= 0; i--)
+            listLocalMigrations.Reverse();
+            if(listLocalMigrations.Count == 0) { DbConnectAndDbUpdateStatus = "Миграции отсутствуют"; }
+            var isSuitableDb = false;
+            foreach (var item in listLocalMigrations)
             {
-                var isCheck = _migrator.GetDatabaseMigrations().Any(dbitem => dbitem == listLocalMigrations[i]);
-                list.Add(new Migration() { Name = listLocalMigrations[i], Check = isCheck });
+                var isCheck = dbMigrationsList.Any(dbitem => dbitem == item);
+                if (isCheck || (dbMigrationsList.Count == 0)) { isSuitableDb = true; }
+                list.Add(new Migration() { Name = item, Check = isCheck });  
             }
-            if (list.Count != 0)
+            if (!isSuitableDb)
             {
-                list[0].Name = list[0].Name + " Последняя версия";
+                DbConnectAndDbUpdateStatus = "База данных имеет свой набор транзакций";
+                return;
             }
-            else
-            {
-                ResultUpdate = "Миграции отсутствуют";
-            }
-            List = list;
+            if (list.Count != 0) { list[0].Name = list[0].Name + LastVersion; }
+            MigrationList = list;
         }
 
         #region ConnectToDbCommand
@@ -185,8 +215,8 @@ namespace GeneralModel.ViewModel
 
         private void ConnectToDbBtn()
         {
-            _threadDbConnection = new Thread(new ThreadStart(ConnectToDb));
-            _threadDbConnection.Start();
+            _secondThread = new Thread(new ThreadStart(ConnectToDb));
+            _secondThread.Start();
         }
         #endregion
 
@@ -195,9 +225,8 @@ namespace GeneralModel.ViewModel
 
         private void UpdateDbToLastVersion()
         {
-            _threadDbConnection = new Thread(new ThreadStart(ConnectToDb));
-            _threadDbConnection = new Thread(new ParameterizedThreadStart(UpdateDb));
-            _threadDbConnection.Start(_migrator.GetLocalMigrations().Last());
+            _secondThread = new Thread(new ParameterizedThreadStart(UpdateDb));
+            _secondThread.Start(_migrator.GetLocalMigrations().Last());
         }
         #endregion
 
@@ -210,10 +239,9 @@ namespace GeneralModel.ViewModel
             {
                 if (!string.IsNullOrEmpty(SelectedMigration.Name))
                 {
-                    _threadDbConnection = new Thread(new ThreadStart(ConnectToDb));
-                    _threadDbConnection = new Thread(new ParameterizedThreadStart(UpdateDb));
-                    _threadDbConnection.Start(SelectedMigration.Name.Contains(" Последняя версия")
-                        ? SelectedMigration.Name.Replace(" Последняя версия", "")
+                    _secondThread = new Thread(new ParameterizedThreadStart(UpdateDb));
+                    _secondThread.Start(SelectedMigration.Name.Contains(LastVersion)
+                        ? SelectedMigration.Name.Replace(LastVersion, "")
                         : SelectedMigration.Name);
                 }
             }

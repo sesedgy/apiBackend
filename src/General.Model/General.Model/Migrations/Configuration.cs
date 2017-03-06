@@ -11,6 +11,7 @@ namespace PoiskIT.Okenit2.General.Migrations
         {
             AutomaticMigrationsEnabled = true;
             AutomaticMigrationDataLossAllowed = true;
+            CommandTimeout = 10;
         }
 
         protected override void Seed(PoiskIT.Okenit2.General.Context.GeneralContext context)
