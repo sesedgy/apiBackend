@@ -21,7 +21,6 @@ namespace GeneralModel.ViewModel
         #region Properties
         private readonly Configuration _config;
         private DbMigrator _migrator;
-        private Thread _secondThread;
         private const string LastVersion = " Последняя версия";
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -41,7 +40,7 @@ namespace GeneralModel.ViewModel
             set
             {
                 _connectionString = value;
-                RaisePropertyChanged("ConnectionStringTb");
+                RaisePropertyChanged("ConnectionString");
             }
         }
 
@@ -56,14 +55,25 @@ namespace GeneralModel.ViewModel
             }
         }
 
-        private bool _updateDbToLastVersionBtnIsDisabled;
-        public bool UpdateDbToLastVersionBtnIsDisabled
+        private bool _connectToDbBtnIsDisabled;
+        public bool ConnectToDbBtnIsDisabled
         {
-            get { return _updateDbToLastVersionBtnIsDisabled; }
+            get { return _connectToDbBtnIsDisabled; }
             set
             {
-                _updateDbToLastVersionBtnIsDisabled = value;
-                RaisePropertyChanged("UpdateDbToLastVersionBtnIsDisabled");
+                _connectToDbBtnIsDisabled = !value;
+                RaisePropertyChanged("ConnectToDbBtnIsDisabled");
+            }
+        }
+
+        private bool _updateDbToVersionBtnIsDisabled;
+        public bool UpdateDbToVersionBtnIsDisabled
+        {
+            get { return _updateDbToVersionBtnIsDisabled; }
+            set
+            {
+                _updateDbToVersionBtnIsDisabled = !value;
+                RaisePropertyChanged("UpdateDbToVersionBtnIsDisabled");
             }
         }
 
@@ -127,20 +137,22 @@ namespace GeneralModel.ViewModel
             ConnectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString();
             ProviderName = ConfigurationManager.ConnectionStrings["DefaultConnection"].ProviderName;
             ProgressBarVisibility = Visibility.Hidden;
-            UpdateDbToLastVersionBtnIsDisabled = true;
+            UpdateDbToVersionBtnIsDisabled = true;
+            ConnectToDbBtnIsDisabled = false;
         }
 
-        private void UpdateDb(object targetMigrationName)
+        private void UpdateDb(string targetMigrationName)
         {
             ProgressBarVisibility = Visibility.Visible;
-            UpdateDbToLastVersionBtnIsDisabled = false;
+            UpdateDbToVersionBtnIsDisabled = true;
+            ConnectToDbBtnIsDisabled = true;
             try
             {
                 if (
                     MessageBox.Show("Вы действительно желаете обновить БД до версии: " + targetMigrationName, "Обновление БД",
                         MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
-                    var updateDbTask = new Task(() => _migrator.Update((string) targetMigrationName));
+                    var updateDbTask = new Task(() => _migrator.Update(targetMigrationName));
                     updateDbTask.Start();
                     updateDbTask.Wait();                    
                     UpdateGrid();
@@ -154,14 +166,15 @@ namespace GeneralModel.ViewModel
             finally
             {
                 ProgressBarVisibility = Visibility.Hidden;
-                UpdateDbToLastVersionBtnIsDisabled = true;
+                UpdateDbToVersionBtnIsDisabled = false;
+                ConnectToDbBtnIsDisabled = false;
             }
         }
 
         private void ConnectToDb()
         {
             ProgressBarVisibility = Visibility.Visible;
-            UpdateDbToLastVersionBtnIsDisabled = false;        
+            UpdateDbToVersionBtnIsDisabled = true;        
             try
             {
                 //Проверка валидности ConnectionString
@@ -173,16 +186,17 @@ namespace GeneralModel.ViewModel
                 _migrator = new DbMigrator(_config);
                 UpdateGrid();
                 DbConnectAndDbUpdateStatus = "";
+                UpdateDbToVersionBtnIsDisabled = false;
             }
             catch (Exception exception)
             {
                 MigrationList = new List<Migration>();
                 DbConnectAndDbUpdateStatus = "При подключении к БД возникла ошибка: " + exception.Message;
+                UpdateDbToVersionBtnIsDisabled = true;
             }
             finally
             {
                 ProgressBarVisibility = Visibility.Hidden;
-                UpdateDbToLastVersionBtnIsDisabled = true;
             }
 
         }
@@ -215,8 +229,10 @@ namespace GeneralModel.ViewModel
 
         private void ConnectToDbBtn()
         {
-            _secondThread = new Thread(new ThreadStart(ConnectToDb));
-            _secondThread.Start();
+            //_secondThread = new Thread(new ThreadStart(ConnectToDb));
+            var connectToDbTask = new Task(ConnectToDb);
+            connectToDbTask.Start(); 
+            //_secondThread.Start();
         }
         #endregion
 
@@ -225,8 +241,10 @@ namespace GeneralModel.ViewModel
 
         private void UpdateDbToLastVersion()
         {
-            _secondThread = new Thread(new ParameterizedThreadStart(UpdateDb));
-            _secondThread.Start(_migrator.GetLocalMigrations().Last());
+            var updateDbToLastVersionTask = new Task(() => UpdateDb(_migrator.GetLocalMigrations().Last()));
+            updateDbToLastVersionTask.Start();
+            //_secondThread = new Thread(new ParameterizedThreadStart(UpdateDb));
+            //_secondThread.Start(_migrator.GetLocalMigrations().Last());
         }
         #endregion
 
@@ -239,10 +257,10 @@ namespace GeneralModel.ViewModel
             {
                 if (!string.IsNullOrEmpty(SelectedMigration.Name))
                 {
-                    _secondThread = new Thread(new ParameterizedThreadStart(UpdateDb));
-                    _secondThread.Start(SelectedMigration.Name.Contains(LastVersion)
+                    var updateDbToVersionTask = new Task(() => UpdateDb(SelectedMigration.Name.Contains(LastVersion)
                         ? SelectedMigration.Name.Replace(LastVersion, "")
-                        : SelectedMigration.Name);
+                        : SelectedMigration.Name));
+                    updateDbToVersionTask.Start();
                 }
             }
             catch (Exception)

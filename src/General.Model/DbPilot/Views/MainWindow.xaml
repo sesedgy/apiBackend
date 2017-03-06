@@ -13,10 +13,10 @@
             <Border BorderBrush="Black" BorderThickness="1" Height="auto" Margin="10,10,10,10" VerticalAlignment="Top" HorizontalAlignment="Center" Width="auto" Grid.Row="0">
                 <Grid>        
                     <Label x:Name="Label1" Content="Connection string" HorizontalAlignment="Left" Margin="10,7,0,0" VerticalAlignment="Top" Height="26" Width="104"/>
-                    <TextBox x:Name="ConnectionStringTb" Text="{Binding ConnectionString}" Height="auto" Width="auto" Margin="10,30,10,30" MinHeight="10" MinWidth="400" VerticalAlignment="Top"/>
+                    <TextBox x:Name="ConnectionString" Text="{Binding ConnectionString}" Height="auto" Width="auto" Margin="10,30,10,30" MinHeight="10" MinWidth="400" VerticalAlignment="Top"/>
                     <Label x:Name="Label2" Content="Provider name" HorizontalAlignment="Left" Margin="10,43,0,0" VerticalAlignment="Top" Height="26" Width="104"/>
                     <TextBox x:Name="ProviderName" Text="{Binding ProviderName}" Height="auto" Width="auto" Margin="10,66,10,30" MinHeight="10" MinWidth="400" VerticalAlignment="Top"/>
-                    <Button x:Name="ConnectToDb" Content="Подключиться" IsEnabled="{Binding UpdateDbToLastVersionBtnIsDisabled}" Command="{Binding ConnectToDbCommand}" VerticalAlignment="Bottom" Height="20px" Width="90px" MinWidth="90px" MinHeight="20px" HorizontalAlignment="Right" Margin="0,0,10,5"/>
+                    <Button x:Name="ConnectToDb" Content="Подключиться" IsEnabled="{Binding ConnectToDbBtnIsDisabled}" Command="{Binding ConnectToDbCommand}" VerticalAlignment="Bottom" Height="20px" Width="90px" MinWidth="90px" MinHeight="20px" HorizontalAlignment="Right" Margin="0,0,10,5"/>
                 </Grid>
             </Border> 
         
@@ -34,13 +34,13 @@
                       </DataGrid.Columns>
                       <DataGrid.ContextMenu>
                             <ContextMenu >
-                                <MenuItem Header="Обновить до текущей версии" IsEnabled="{Binding UpdateDbToLastVersionBtnIsDisabled}" Command="{Binding UpdateDbToVersionCommand}" CommandParameter="{Binding ElementName=MainWindows, Path=(FocusManager.FocusedElement)}" />                           
+                                <MenuItem Header="Обновить до текущей версии" IsEnabled="{Binding UpdateDbToVersionBtnIsDisabled}" Command="{Binding UpdateDbToVersionCommand}" CommandParameter="{Binding ElementName=MainWindows, Path=(FocusManager.FocusedElement)}" />                           
                             </ContextMenu>
                         </DataGrid.ContextMenu>
                     </DataGrid>
                     <Grid Grid.Row="1" Margin="0,0,0,10">
                         <TextBlock x:Name="ResultUpdate" Text="{Binding DbConnectAndDbUpdateStatus}" Foreground="DarkRed" HorizontalAlignment="left" Margin="10,0,205,5" VerticalAlignment="Bottom" Width="auto" Height="auto" MinWidth="540px"/>
-                        <Button x:Name="UpdateDbToLastVersion" IsEnabled="{Binding UpdateDbToLastVersionBtnIsDisabled}" Command="{Binding UpdateDbToLastVersionCommand}" Content="Обновить БД до последней версии" HorizontalAlignment="Right" Margin="0,0,10,5" VerticalAlignment="Bottom" Width="200px" MinWidth="200px"  Height="20px" MinHeight="20px"/>
+                        <Button x:Name="UpdateDbToLastVersion" IsEnabled="{Binding UpdateDbToVersionBtnIsDisabled}" Command="{Binding UpdateDbToLastVersionCommand}" Content="Обновить БД до последней версии" HorizontalAlignment="Right" Margin="0,0,10,5" VerticalAlignment="Bottom" Width="200px" MinWidth="200px"  Height="20px" MinHeight="20px"/>
                     </Grid>
                 </Grid>
             </Border>        
