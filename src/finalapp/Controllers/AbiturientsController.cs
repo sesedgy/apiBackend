@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using finalapp.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,80 +17,91 @@ namespace finalapp.Controllers
             _context = context;
         }
 
-        // GET: api/users/8e783c7e-717b-4efa-c067-08d455bbcfaa
+        // GET: api/abiturients/8e783c7e-717b-4efa-c067-08d455bbcfaa
         [HttpGet("{id}")]
-        public User Get(string id)
+        public Abiturient Get(string id)
         {
-            var user = new User();
+            Abiturient abiturient;
             using (var context = _context)
             {
-                user = (from u in context.Users
-                        where u.Id == new Guid(id)
-                        select u).SingleOrDefault();
+                abiturient = (from u in context.Abiturients
+                    where u.Id == new Guid(id)
+                    select u).SingleOrDefault();
             }
-            return user;
+            return abiturient;
         }
 
         // POST: api/users
         [HttpPost]
-        public StatusCodeResult Create(User user)
+        public RedirectResult Create([FromBody] UserForAbiturient userAndAbiturient)
         {
+            //TODO Отправка письма на почту         
+            var user = userAndAbiturient.User;
+            var abiturient = userAndAbiturient.Abiturient;
+
+            user.IdClient = abiturient.Id;
+            user.Role = "IsAbiturient";
+
+            abiturient.UserId = user.Id;
+
             try
             {
-                user.Id = new Guid();
-                _context.Users.Add(user);
+                var usersController = new UsersController(_context);
+                if (!usersController.Create(user))
+
+                _context.Abiturients.Add(abiturient);
                 _context.SaveChanges();
-                return new StatusCodeResult(204);
+                return new RedirectResult("https://www.google.ru/");
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return new StatusCodeResult(500);
+                return new RedirectResult("https://www.google.ru/");
             }
         }
 
         // POST: api/users/8e783c7e-717b-4efa-c067-08d455bbcfaa
-        [HttpPost("{id}")]
-        public StatusCodeResult Update(string id, [FromBody]User user)
-        {
-            User userFromDB = null;
-            using (var context = _context)
-            {
-                userFromDB = (from u in context.Users
-                              where u.Id == new Guid(id)
-                              select u).SingleOrDefault();
-            }
-            if (userFromDB != null)
-            {
-                _context.Remove(userFromDB);
-                _context.Users.Add(user);
-                return new StatusCodeResult(204);
-            }
-            else
-            {
-                return new StatusCodeResult(404);
-            }
-        }
+        //[HttpPost("{id}")]
+        //public StatusCodeResult Update(string id, [FromBody]Abiturient abiturient)
+        //{
+        //    User userFromDb;
+        //    using (var context = _context)
+        //    {
+        //        userFromDb = (from u in context.Users
+        //                      where u.Id == new Guid(id)
+        //                      select u).SingleOrDefault();
+        //    }
+        //    if (userFromDb != null)
+        //    {
+        //        _context.Remove(userFromDb);
+        //        _context.Users.Add(userFromDb);
+        //        return new StatusCodeResult(204);
+        //    }
+        //    else
+        //    {
+        //        return new StatusCodeResult(404);
+        //    }
+        //}
 
         // DELETE: api/users/8e783c7e-717b-4efa-c067-08d455bbcfaa
-        [HttpDelete("{id}")]
-        public StatusCodeResult Delete(string id)
-        {
-            User userFromDB = null;
-            using (var context = _context)
-            {
-                userFromDB = (from u in context.Users
-                              where u.Id == new Guid(id)
-                              select u).SingleOrDefault();
-            }
-            if (userFromDB != null)
-            {
-                _context.Remove(userFromDB);
-                return new StatusCodeResult(204);
-            }
-            else
-            {
-                return new StatusCodeResult(404);
-            }
-        }
+        //[HttpDelete("{id}")]
+        //public StatusCodeResult Delete(string id)
+        //{
+        //    User userFromDb;
+        //    using (var context = _context)
+        //    {
+        //        userFromDb = (from u in context.Users
+        //                      where u.Id == new Guid(id)
+        //                      select u).SingleOrDefault();
+        //    }
+        //    if (userFromDb != null)
+        //    {
+        //        _context.Remove(userFromDb);
+        //        return new StatusCodeResult(204);
+        //    }
+        //    else
+        //    {
+        //        return new StatusCodeResult(404);
+        //    }
+        //}
     }
 }

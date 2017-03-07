@@ -26,6 +26,14 @@ namespace finalapp
 
         public string AddCookie(User user)
         {
+            foreach (var item in _dictionary)
+            {
+                if (item.Value.UserId == user.Id)
+                {
+                    _dictionary.Remove(item.Key);
+                    break;
+                }
+            }
             var guid = new Guid();
             var cookie = new Cookie() {Id = guid, UserId = user.Id,};
             switch (user.Role)
