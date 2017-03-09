@@ -3,11 +3,9 @@ using System.Linq;
 using finalapp.Models;
 using Microsoft.AspNetCore.Mvc;
 
-// For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace finalapp.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     public class AbiturientsController : Controller
     {
         private readonly DataBaseContext _context;
@@ -17,7 +15,7 @@ namespace finalapp.Controllers
             _context = context;
         }
 
-        // GET: api/abiturients/8e783c7e-717b-4efa-c067-08d455bbcfaa
+        // GET: api/abiturients/get/id
         [HttpGet("{id}")]
         public Abiturient Get(string id)
         {
@@ -31,7 +29,7 @@ namespace finalapp.Controllers
             return abiturient;
         }
 
-        // POST: api/users
+        // POST: api/abiturients/create
         [HttpPost]
         public RedirectResult Create([FromBody] UserForAbiturient userAndAbiturient)
         {
@@ -51,10 +49,12 @@ namespace finalapp.Controllers
 
                 _context.Abiturients.Add(abiturient);
                 _context.SaveChanges();
+                //TODO ссылку на страницу академии
                 return new RedirectResult("https://www.google.ru/");
             }
             catch (Exception)
             {
+                //TODO ссылку на страницу академии c ошибкой и просьбой пройти регистрацию еще раз 
                 return new RedirectResult("https://www.google.ru/");
             }
         }

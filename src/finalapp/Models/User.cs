@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace finalapp.Models
 {
@@ -27,6 +24,7 @@ namespace finalapp.Models
     {
         public User User { get; set; }
         public Abiturient Abiturient { get; set; }
+        public IFormFile Photo { get; set; }
     }
 
     public class UserForTeacher

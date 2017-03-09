@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace finalapp.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     public class UsersController : Controller
     {
         private readonly DataBaseContext _context;
@@ -48,8 +48,8 @@ namespace finalapp.Controllers
             return false;
         }
 
-        // GET: api/users/login=log&password=pass
-        [HttpGet]
+        //api/users/isLoginAndEmailFree/login&password
+        [HttpGet("{login}&{password}")]
         public string Authorization(string login, string password)
         {
             User user;
@@ -77,8 +77,8 @@ namespace finalapp.Controllers
             return null;
         }
 
-        // GET: api/users/login=log&email=email
-        [HttpGet]
+        //api/users/isLoginAndEmailFree/login&email
+        [HttpGet("{login}&{email}")]
         public bool[] IsLoginAndEmailFree(string login, string email)
         {
             User userFromDb;
@@ -93,15 +93,13 @@ namespace finalapp.Controllers
                               select u).SingleOrDefault();
             }
             var isLoginAndEmailFree = new bool[2];
-            //isLoginAndEmailFree[0] = userFromDb != null;
-            //isLoginAndEmailFree[1] = userFromDb2 != null;
             isLoginAndEmailFree[0] = userFromDb == null;
             isLoginAndEmailFree[1] = userFromDb2 == null;
             return isLoginAndEmailFree;
         }
 
-        // GET: api/users/8e783c7e-717b-4efa-c067-08d455bbcfaa
-        [HttpGet]
+        //api/users/get/id
+        [HttpGet("{id}")]
         public User Get(string id)
         {
             User user;
