@@ -1,5 +1,4 @@
-﻿using System.Windows.Controls;
-using GeneralModel.ViewModel;
+﻿using GeneralModel.ViewModel;
 
 namespace GeneralModel.Views
 {
@@ -9,8 +8,6 @@ namespace GeneralModel.Views
         {
             DataContext = new MainWindowViewModel();
             InitializeComponent();
-            ScrollViewer viewer = new ScrollViewer();
-            viewer.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
         }
     }
 }

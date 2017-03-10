@@ -207,52 +207,50 @@ namespace GeneralModel.ViewModel
             MigrationList = list;
         }
 
-        //public RelayCommand ConnectToDbAndUpdateMigrationListCommand { get; private set; }
-
         #region connectToDbAndUpdateMigrationListCommand
-        private DelegateCommand connectToDbAndUpdateMigrationListCommand;
+        private DelegateCommand _connectToDbAndUpdateMigrationListCommand;
 
         public ICommand ConnectToDbAndUpdateMigrationListCommand
         {
             get
             {
-                if (connectToDbAndUpdateMigrationListCommand == null)
+                if (_connectToDbAndUpdateMigrationListCommand == null)
                 {
-                    connectToDbAndUpdateMigrationListCommand = new DelegateCommand(ConnectToDbAndUpdateMigrationList);
+                    _connectToDbAndUpdateMigrationListCommand = new DelegateCommand(ConnectToDbAndUpdateMigrationList);
                 }
-                return connectToDbAndUpdateMigrationListCommand;
+                return _connectToDbAndUpdateMigrationListCommand;
             }
         }
         #endregion
 
         #region updateDbToLastVersionCommand
-        public DelegateCommand updateDbToLastVersionCommand { get; private set; }
+        private DelegateCommand _updateDbToLastVersionCommand;
 
         public ICommand UpdateDbToLastVersionCommand
         {
             get
             {
-                if (updateDbToLastVersionCommand == null)
+                if (_updateDbToLastVersionCommand == null)
                 {
-                    updateDbToLastVersionCommand = new DelegateCommand(() => UpdateDb(_migrator.GetLocalMigrations().Last()));
+                    _updateDbToLastVersionCommand = new DelegateCommand(() => UpdateDb(_migrator.GetLocalMigrations().Last()));
                 }
-                return updateDbToLastVersionCommand;
+                return _updateDbToLastVersionCommand;
             }
         }
         #endregion
 
         #region UpdateDbToVersionCommand
-        public DelegateCommand updateDbToVersionCommand { get; private set; }
+        private DelegateCommand _updateDbToVersionCommand;
 
         public ICommand UpdateDbToVersionCommand
         {
             get
             {
-                if (updateDbToVersionCommand == null)
+                if (_updateDbToVersionCommand == null)
                 {
-                    updateDbToVersionCommand = new DelegateCommand(UpdateDbToVersion);
+                    _updateDbToVersionCommand = new DelegateCommand(UpdateDbToVersion);
                 }
-                return updateDbToVersionCommand;
+                return _updateDbToVersionCommand;
             }
         }
 
