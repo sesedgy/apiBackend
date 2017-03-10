@@ -8,19 +8,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using Mvvm.Commands;
+using Microsoft.Practices.Prism.Commands;
 using Configuration = PoiskIT.Okenit2.General.Migrations.Configuration;
 
 namespace GeneralModel.ViewModel
 {
     class MainWindowViewModel: INotifyPropertyChanged
     {
-        #region Properties
         private readonly Configuration _config;
         private DbMigrator _migrator;
         private const string LastVersion = " Последняя версия";
-        public event PropertyChangedEventHandler PropertyChanged;
 
+        #region Properties
+        public event PropertyChangedEventHandler PropertyChanged;
         protected void RaisePropertyChanged(string name)
         {
             PropertyChangedEventHandler handler = PropertyChanged;
