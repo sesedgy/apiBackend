@@ -1,16 +1,16 @@
-﻿using System.Windows;
+﻿using System.Windows.Controls;
+using GeneralModel.ViewModel;
 
 namespace GeneralModel.Views
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    /// 
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
         public MainWindow()
         {
+            DataContext = new MainWindowViewModel();
             InitializeComponent();
+            ScrollViewer viewer = new ScrollViewer();
+            viewer.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
         }
     }
 }
