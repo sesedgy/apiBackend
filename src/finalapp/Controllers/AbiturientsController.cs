@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using finalapp.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace finalapp.Controllers
@@ -31,17 +32,14 @@ namespace finalapp.Controllers
 
         // POST: api/abiturients/create
         [HttpPost]
-        public RedirectResult Create([FromBody] UserForAbiturient userAndAbiturient)
+        public RedirectResult Create([FromBody] object[] userAndAbiturient)
         {
-            //TODO Отправка письма на почту         
-            var user = userAndAbiturient.User;
-            var abiturient = userAndAbiturient.Abiturient;
-
-            user.IdClient = abiturient.Id;
+            //TODO Отправка письма на почту
+            //TODO Сохранение фотки         
+            var user = (User)userAndAbiturient[0];
+            var abiturient = (Abiturient)userAndAbiturient[1];
+            var photo = (IFormFile)userAndAbiturient[2];
             user.Role = "IsAbiturient";
-
-            abiturient.UserId = user.Id;
-
             try
             {
                 var usersController = new UsersController(_context);

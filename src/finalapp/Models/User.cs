@@ -19,21 +19,4 @@ namespace finalapp.Models
         public DateTime UpdatedDate { get; set; }
         public DateTime LastActivityDate { get; set; }
     }
-
-    public class UserForAbiturient
-    {
-        public User User { get; set; }
-        public Abiturient Abiturient { get; set; }
-        public IFormFile Photo { get; set; }
-    }
-
-    public class UserForTeacher
-    {
-
-    }
-
-    public class UserForEmployee
-    {
-
-    }
 }
