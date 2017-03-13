@@ -229,15 +229,10 @@ namespace GeneralModel.ViewModel
             {
                 if (_updateDbToLastVersionCommand == null)
                 {
-                    _updateDbToLastVersionCommand = new RelayCommand(UpdateDbToLastVersion);
+                    _updateDbToLastVersionCommand = new RelayCommand(() => UpdateDb(_migrator.GetLocalMigrations().Last()));
                 }
                 return _updateDbToLastVersionCommand;
             }
-        }
-
-        private void UpdateDbToLastVersion()
-        {
-            UpdateDb(_migrator.GetLocalMigrations().Last());
         }
         #endregion
 
@@ -249,18 +244,14 @@ namespace GeneralModel.ViewModel
             {
                 if (_updateDbToVersionCommand == null)
                 {
-                    _updateDbToVersionCommand = new RelayCommand(UpdateDbToVersion);
+                    _updateDbToVersionCommand = new RelayCommand(() => UpdateDb(SelectedMigration.Name.Contains(LastVersion)
+                                ? SelectedMigration.Name.Replace(LastVersion, "")
+                                : SelectedMigration.Name));
                 }
                 return _updateDbToVersionCommand;
             }
         }
 
-        private void UpdateDbToVersion()
-        {
-            UpdateDb(SelectedMigration.Name.Contains(LastVersion)
-                                ? SelectedMigration.Name.Replace(LastVersion, "")
-                                : SelectedMigration.Name);
-        }
         #endregion
     }
 }
