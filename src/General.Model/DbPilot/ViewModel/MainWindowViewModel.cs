@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
-using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using Microsoft.Practices.Prism.Commands;
 using Configuration = PoiskIT.Okenit2.General.Migrations.Configuration;
 
 namespace GeneralModel.ViewModel
@@ -208,15 +206,16 @@ namespace GeneralModel.ViewModel
         }
 
         #region connectToDbAndUpdateMigrationListCommand
-        private DelegateCommand _connectToDbAndUpdateMigrationListCommand;
-
+        private ICommand _connectToDbAndUpdateMigrationListCommand;
         public ICommand ConnectToDbAndUpdateMigrationListCommand
         {
             get
             {
                 if (_connectToDbAndUpdateMigrationListCommand == null)
                 {
-                    _connectToDbAndUpdateMigrationListCommand = new DelegateCommand(ConnectToDbAndUpdateMigrationList);
+                    _connectToDbAndUpdateMigrationListCommand = new RelayCommand(
+                        param => ConnectToDbAndUpdateMigrationList()
+                    );
                 }
                 return _connectToDbAndUpdateMigrationListCommand;
             }
@@ -224,15 +223,16 @@ namespace GeneralModel.ViewModel
         #endregion
 
         #region updateDbToLastVersionCommand
-        private DelegateCommand _updateDbToLastVersionCommand;
-
+        private ICommand _updateDbToLastVersionCommand;
         public ICommand UpdateDbToLastVersionCommand
         {
             get
             {
                 if (_updateDbToLastVersionCommand == null)
                 {
-                    _updateDbToLastVersionCommand = new DelegateCommand(() => UpdateDb(_migrator.GetLocalMigrations().Last()));
+                    _updateDbToLastVersionCommand = new RelayCommand(
+                        param => UpdateDb(_migrator.GetLocalMigrations().Last())
+                    );
                 }
                 return _updateDbToLastVersionCommand;
             }
@@ -240,29 +240,20 @@ namespace GeneralModel.ViewModel
         #endregion
 
         #region UpdateDbToVersionCommand
-        private DelegateCommand _updateDbToVersionCommand;
-
+        private ICommand _updateDbToVersionCommand;
         public ICommand UpdateDbToVersionCommand
         {
             get
             {
                 if (_updateDbToVersionCommand == null)
                 {
-                    _updateDbToVersionCommand = new DelegateCommand(UpdateDbToVersion);
+                    _updateDbToVersionCommand = new RelayCommand(
+                        param => UpdateDb(SelectedMigration.Name.Contains(LastVersion)
+                                ? SelectedMigration.Name.Replace(LastVersion, "")
+                                : SelectedMigration.Name)
+                    );
                 }
                 return _updateDbToVersionCommand;
-            }
-        }
-
-
-        private void UpdateDbToVersion()
-        {
-            if (SelectedMigration != null)
-            {
-                UpdateDb(
-                    SelectedMigration.Name.Contains(LastVersion)
-                    ? SelectedMigration.Name.Replace(LastVersion, "")
-                    : SelectedMigration.Name);
             }
         }
         #endregion
