@@ -31,7 +31,8 @@
                          Margin="5,-5,5,0" 
                          HorizontalAlignment="Stretch"/>
                 <Button x:Name="ConnectToDb" 
-                        Content="Подключиться" 
+                        Content="Подключиться"
+                        
                         IsEnabled="{Binding ConnectToDbBtnIsEnabled}" 
                         Command="{Binding ConnectToDbAndUpdateMigrationListCommand}" 
                         MinWidth="90px" MinHeight="20px" 

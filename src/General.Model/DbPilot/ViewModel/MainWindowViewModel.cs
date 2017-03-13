@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
+using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -213,9 +214,7 @@ namespace GeneralModel.ViewModel
             {
                 if (_connectToDbAndUpdateMigrationListCommand == null)
                 {
-                    _connectToDbAndUpdateMigrationListCommand = new RelayCommand(
-                        param => ConnectToDbAndUpdateMigrationList()
-                    );
+                    _connectToDbAndUpdateMigrationListCommand = new RelayCommand(ConnectToDbAndUpdateMigrationList);
                 }
                 return _connectToDbAndUpdateMigrationListCommand;
             }
@@ -230,12 +229,15 @@ namespace GeneralModel.ViewModel
             {
                 if (_updateDbToLastVersionCommand == null)
                 {
-                    _updateDbToLastVersionCommand = new RelayCommand(
-                        param => UpdateDb(_migrator.GetLocalMigrations().Last())
-                    );
+                    _updateDbToLastVersionCommand = new RelayCommand(UpdateDbToLastVersion);
                 }
                 return _updateDbToLastVersionCommand;
             }
+        }
+
+        private void UpdateDbToLastVersion()
+        {
+            UpdateDb(_migrator.GetLocalMigrations().Last());
         }
         #endregion
 
@@ -247,14 +249,17 @@ namespace GeneralModel.ViewModel
             {
                 if (_updateDbToVersionCommand == null)
                 {
-                    _updateDbToVersionCommand = new RelayCommand(
-                        param => UpdateDb(SelectedMigration.Name.Contains(LastVersion)
-                                ? SelectedMigration.Name.Replace(LastVersion, "")
-                                : SelectedMigration.Name)
-                    );
+                    _updateDbToVersionCommand = new RelayCommand(UpdateDbToVersion);
                 }
                 return _updateDbToVersionCommand;
             }
+        }
+
+        private void UpdateDbToVersion()
+        {
+            UpdateDb(SelectedMigration.Name.Contains(LastVersion)
+                                ? SelectedMigration.Name.Replace(LastVersion, "")
+                                : SelectedMigration.Name);
         }
         #endregion
     }
