@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace GeneralModel
@@ -15,7 +11,7 @@ namespace GeneralModel
         readonly Action<object> _execute;
         readonly Predicate<object> _canExecute;
 
-        #endregion // Fields
+        #endregion
 
         #region Constructors
 
@@ -42,7 +38,7 @@ namespace GeneralModel
             _canExecute = canExecute;
         }
 
-        #endregion // Constructors
+        #endregion
 
         #region ICommand Members
 
@@ -63,6 +59,6 @@ namespace GeneralModel
             _execute(parameters);
         }
 
-        #endregion // ICommand Members
+        #endregion
     }
 }
