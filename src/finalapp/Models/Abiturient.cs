@@ -8,6 +8,9 @@ namespace finalapp.Models
         public string LastName { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
+        public string LastNameDP { get; set; }
+        public string FirstNameDP { get; set; }
+        public string MiddleNameDP { get; set; }
         public DateTime BirthDate { get; set; }
         public string MobilePhone { get; set; }
         public string Citizenship { get; set; }
@@ -87,6 +90,17 @@ namespace finalapp.Models
         public string CorrespondingAccount { get; set; }
         public string FioRepresentative { get; set; }
         public string PhoneOfTheOrganisation { get; set; }
+        public string СertificateOfMilitarySeries { get; set; }
+        public string СertificateOfMilitaryNumber { get; set; }
+        public string СertificateOfMilitaryOffice { get; set; }    //Где стоит на учете
+        public string MilitaryTicketSeries { get; set; }
+        public string MilitaryTicketNumber { get; set; }
+        public DateTime MilitaryTicketWhenGive { get; set; }
+        public string MilitaryTicketWhoGive { get; set; }
+        public string MilitaryTicketRank { get; set; }
+        public string MilitaryTicketCodeVus { get; set; }
+        public string MilitaryTicketMilitaryOffice { get; set; }    //Где стоит на учете
+
         public Guid WhoUpdate { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }

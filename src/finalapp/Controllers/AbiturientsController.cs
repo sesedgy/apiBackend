@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
+using finalapp.CommonServices;
 using finalapp.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -34,7 +36,6 @@ namespace finalapp.Controllers
         [HttpPost]
         public RedirectResult Create([FromBody] object[] userAndAbiturient)
         {
-            //TODO Отправка письма на почту
             //TODO Сохранение фотки         
             var user = (User)userAndAbiturient[0];
             var abiturient = (Abiturient)userAndAbiturient[1];
@@ -47,6 +48,17 @@ namespace finalapp.Controllers
 
                 _context.Abiturients.Add(abiturient);
                 _context.SaveChanges();
+                //Отправка Email
+                string emailBody = "Здравствуйте! \n" + abiturient.LastName + " " + abiturient.FirstName + " " +
+                                   abiturient.MiddleName + " \n" +
+                                   "Логин от личного кабинета: " + user.Login + " Пароль: " + user.Password + " \n" +
+                                   "Личный кабинет расположен по ссылке: http://www.iuikb.ru/eStudent/ \n" +
+                                   "В личном кабинете вы можете изменить анкетные данные в случае их изменения, распечатать бланки необходимые для поступления. \n" + 
+                                   "Так же вы можете следить за ходом приемной комиссии \n";
+                EmailService emailService = new EmailService();
+                var sendEmailTask = new Task(async() => await emailService.SendEmailAsync(user.Email, "Завершение подачи документов", emailBody));
+                sendEmailTask.Start();
+
                 //TODO ссылку на страницу академии
                 return new RedirectResult("https://www.google.ru/");
             }
