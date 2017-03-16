@@ -2,12 +2,12 @@
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using finalapp.Models;
+using eRegistration.Models;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace finalapp.Controllers
+namespace eRegistration.Controllers
 {
     [Route("api/[controller]/[action]")]
     public class UsersController : Controller

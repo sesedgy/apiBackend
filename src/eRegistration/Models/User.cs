@@ -1,8 +1,6 @@
 ﻿using System;
-using System.IO;
-using Microsoft.AspNetCore.Http;
 
-namespace finalapp.Models
+namespace eRegistration.Models
 {
     public class User
     {

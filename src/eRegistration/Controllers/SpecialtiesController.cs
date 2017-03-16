@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using finalapp.Models;
+using eRegistration.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace finalapp.Controllers
+namespace eRegistration.Controllers
 {
     [Route("api/[controller]/[action]")]
     public class SpecialtiesController : Controller

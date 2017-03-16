@@ -3,9 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using finalapp;
 
-namespace finalapp.Migrations
+namespace eRegistration.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
     [Migration("20170309115105_Initial2")]

@@ -2,16 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
-using finalapp;
 
-namespace finalapp.Migrations
+namespace eRegistration.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    [Migration("20170309114200_Initial")]
-    partial class Initial
+    partial class DataBaseContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.0-rtm-21431")
@@ -197,6 +194,22 @@ namespace finalapp.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Abiturient");
+                });
+
+            modelBuilder.Entity("finalapp.Models.Specialty", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("FormOfEducation");
+
+                    b.Property<string>("NameSpecialty");
+
+                    b.Property<string>("Qualification");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Specialty");
                 });
 
             modelBuilder.Entity("finalapp.Models.User", b =>

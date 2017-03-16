@@ -3,13 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using finalapp;
 
-namespace finalapp.Migrations
+namespace eRegistration.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    [Migration("20170310143719_Initial4")]
-    partial class Initial4
+    [Migration("20170309115201_Initial3")]
+    partial class Initial3
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -197,22 +196,6 @@ namespace finalapp.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Abiturient");
-                });
-
-            modelBuilder.Entity("finalapp.Models.Specialty", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("FormOfEducation");
-
-                    b.Property<string>("NameSpecialty");
-
-                    b.Property<string>("Qualification");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Specialty");
                 });
 
             modelBuilder.Entity("finalapp.Models.User", b =>

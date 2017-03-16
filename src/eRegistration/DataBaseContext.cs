@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using finalapp.Models;
+﻿using eRegistration.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace finalapp
+namespace eRegistration
 {
     public class DataBaseContext : DbContext
     {

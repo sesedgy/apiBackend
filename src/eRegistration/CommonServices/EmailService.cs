@@ -2,7 +2,7 @@
 using MailKit.Net.Smtp;
 using MimeKit;
 
-namespace finalapp.CommonServices
+namespace eRegistration.CommonServices
 {
     public class EmailService
     {

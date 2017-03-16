@@ -3,13 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using finalapp;
 
-namespace finalapp.Migrations
+namespace eRegistration.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    [Migration("20170309115201_Initial3")]
-    partial class Initial3
+    [Migration("20170309114200_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

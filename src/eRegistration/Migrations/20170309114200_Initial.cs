@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace finalapp.Migrations
+namespace eRegistration.Migrations
 {
     public partial class Initial : Migration
     {

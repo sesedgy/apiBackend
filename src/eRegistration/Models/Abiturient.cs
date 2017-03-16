@@ -1,5 +1,6 @@
 ﻿using System;
-namespace finalapp.Models
+
+namespace eRegistration.Models
 {
     public class Abiturient
     {

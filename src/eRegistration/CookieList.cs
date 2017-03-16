@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using finalapp.Models;
+using eRegistration.Models;
 
-namespace finalapp
+namespace eRegistration
 {
     public class CookieList
     {

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using finalapp.CommonServices;
-using finalapp.Models;
+using eRegistration.CommonServices;
+using eRegistration.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace finalapp.Controllers
+namespace eRegistration.Controllers
 {
     [Route("api/[controller]/[action]")]
     public class AbiturientsController : Controller
