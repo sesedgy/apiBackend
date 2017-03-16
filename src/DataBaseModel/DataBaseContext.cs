@@ -1,7 +1,7 @@
-﻿using eRegistration.Models;
+﻿using DataBaseModel.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace eRegistration
+namespace DataBaseModel
 {
     public class DataBaseContext : DbContext
     {
@@ -11,7 +11,7 @@ namespace eRegistration
       
         public DbSet<User> Users { get; set; }
         public DbSet<Abiturient> Abiturients { get; set; }
-        public DbSet<Specialty> Specialties { get; set; }
+        public DbSet<Specialty> Specialities { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -1,4 +1,7 @@
-﻿namespace eRegistration
+﻿using System;
+using DataBaseModel.Models;
+
+namespace DataBaseModel
 {
     public class DataBaseInitializer
     {
@@ -14,6 +17,15 @@
             //{
             //    context.Users.Add(s);
             //}
+            var specialities = new Specialty[]
+            {
+                new Specialty(){Id = new Guid(), FormOfEducation = "Очная", NameSpecialty = "Пожарная безопасность", Qualification = "Специалист"},
+                new Specialty(){Id = new Guid(), FormOfEducation = "Очная", NameSpecialty = "Техносферная безопасность", Qualification = "Бакалавр"},
+            };
+            foreach (Specialty s in specialities)
+            {
+                context.Specialities.Add(s);
+            }
             context.SaveChanges();
 
         }

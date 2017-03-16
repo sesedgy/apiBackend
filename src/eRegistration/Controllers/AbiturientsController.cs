@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using DataBaseModel;
+using DataBaseModel.Models;
 using eRegistration.CommonServices;
-using eRegistration.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,14 +1,14 @@
 ﻿using System;
-using DataBaseModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
+using DataBaseModel;
 
-namespace eRegistration.Migrations
+namespace DataBaseModel.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    [Migration("20170309114200_Initial")]
+    [Migration("20170316160919_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -17,7 +17,7 @@ namespace eRegistration.Migrations
                 .HasAnnotation("ProductVersion", "1.0.0-rtm-21431")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("finalapp.Models.Abiturient", b =>
+            modelBuilder.Entity("DataBaseModel.Models.Abiturient", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -68,6 +68,8 @@ namespace eRegistration.Migrations
 
                     b.Property<string>("FirstNameCustomer");
 
+                    b.Property<string>("FirstNameDP");
+
                     b.Property<string>("FirstNameFather");
 
                     b.Property<string>("FirstNameMother");
@@ -106,6 +108,8 @@ namespace eRegistration.Migrations
 
                     b.Property<string>("LastNameCustomer");
 
+                    b.Property<string>("LastNameDP");
+
                     b.Property<string>("LastNameFather");
 
                     b.Property<string>("LastNameMother");
@@ -124,9 +128,25 @@ namespace eRegistration.Migrations
 
                     b.Property<string>("MiddleNameCustomer");
 
+                    b.Property<string>("MiddleNameDP");
+
                     b.Property<string>("MiddleNameFather");
 
                     b.Property<string>("MiddleNameMother");
+
+                    b.Property<string>("MilitaryTicketCodeVus");
+
+                    b.Property<string>("MilitaryTicketMilitaryOffice");
+
+                    b.Property<string>("MilitaryTicketNumber");
+
+                    b.Property<string>("MilitaryTicketRank");
+
+                    b.Property<string>("MilitaryTicketSeries");
+
+                    b.Property<DateTime>("MilitaryTicketWhenGive");
+
+                    b.Property<string>("MilitaryTicketWhoGive");
 
                     b.Property<string>("MobilePhone");
 
@@ -194,12 +214,34 @@ namespace eRegistration.Migrations
 
                     b.Property<Guid>("WhoUpdate");
 
+                    b.Property<string>("СertificateOfMilitaryNumber");
+
+                    b.Property<string>("СertificateOfMilitaryOffice");
+
+                    b.Property<string>("СertificateOfMilitarySeries");
+
                     b.HasKey("Id");
 
                     b.ToTable("Abiturient");
                 });
 
-            modelBuilder.Entity("finalapp.Models.User", b =>
+            modelBuilder.Entity("DataBaseModel.Models.Specialty", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("FormOfEducation");
+
+                    b.Property<string>("NameSpecialty");
+
+                    b.Property<string>("Qualification");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Specialty");
+                });
+
+            modelBuilder.Entity("DataBaseModel.Models.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();

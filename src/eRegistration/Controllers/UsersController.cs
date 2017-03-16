@@ -2,7 +2,8 @@
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using eRegistration.Models;
+using DataBaseModel;
+using DataBaseModel.Models;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860

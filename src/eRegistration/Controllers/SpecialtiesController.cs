@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using eRegistration.Models;
+using DataBaseModel;
+using DataBaseModel.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eRegistration.Controllers

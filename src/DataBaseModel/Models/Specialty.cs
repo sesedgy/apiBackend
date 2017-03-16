@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace eRegistration.Models
+namespace DataBaseModel.Models
 {
     public class Specialty
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using eRegistration.Models;
+using DataBaseModel.Models;
 
 namespace eRegistration
 {
