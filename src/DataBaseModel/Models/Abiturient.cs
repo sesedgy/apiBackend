@@ -59,7 +59,7 @@ namespace DataBaseModel.Models
         public string NumberEducationDocument { get; set; }
         public DateTime DateEducationDocument { get; set; }
         public string WhoGiveEducationDocument { get; set; }
-        public string UploadedFileName { get; set; }
+        public string PhotoPath { get; set; }
         public string PaymentForm { get; set; }
         public string LastNameCustomer { get; set; }
         public string FirstNameCustomer { get; set; }
