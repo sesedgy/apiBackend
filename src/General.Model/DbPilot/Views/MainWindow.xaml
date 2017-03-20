@@ -1,22 +1,22 @@
 ﻿<Window x:Class="GeneralModel.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:properties="clr-namespace:GeneralModel.Properties"
         Title="Управление миграциями"
         WindowStartupLocation="CenterScreen"  
         Height="500" Width="800" 
         Name="MainWindows" 
         WindowState="Normal" 
         ResizeMode="CanResize">
-
-    <Grid >
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        
-        <Border BorderBrush="Black" 
+
+        <Border BorderBrush="LightGray" 
                 BorderThickness="1" 
-                Margin="10,10,10,10" 
+                Margin="10" 
                 VerticalAlignment="Top" HorizontalAlignment="Stretch" 
                 Grid.Row="0">
 
@@ -31,8 +31,7 @@
                          Margin="5,-5,5,0" 
                          HorizontalAlignment="Stretch"/>
                 <Button x:Name="ConnectToDb" 
-                        Content="Подключиться"
-                        
+                        Content="Подключиться"                      
                         IsEnabled="{Binding ConnectToDbBtnIsEnabled}" 
                         Command="{Binding ConnectToDbAndUpdateMigrationListCommand}" 
                         MinWidth="90px" MinHeight="20px" 
@@ -40,59 +39,55 @@
             </StackPanel>
         </Border>
 
-        <Border BorderBrush="Black" 
-                BorderThickness="1"
-                Margin="10,0,10,10" 
-                VerticalAlignment="Stretch" 
-                HorizontalAlignment="Stretch" 
-                Grid.Row="1">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"></RowDefinition>
-                    <RowDefinition Height="Auto"></RowDefinition>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+        <TabControl Grid.Row="1" Margin="10,0,10,10" BorderBrush="LightGray">
+            <TabItem Header="Миграции">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-                <DataGrid x:Name="DataGrid" 
-                          AutoGenerateColumns="False" 
-                          ItemsSource="{Binding MigrationList}" 
-                          SelectedItem="{Binding SelectedMigration}" 
-                          CanUserAddRows="False" 
-                          CanUserResizeColumns="False" 
-                          CanUserResizeRows="False"
-                          CanUserReorderColumns="False" 
-                          Margin="5" 
-                          
-                          CanUserDeleteRows="False" 
-                          HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
-                          VerticalScrollBarVisibility="Auto"
-                          Grid.Row="0" Grid.ColumnSpan="2">
+                    <DataGrid x:Name="DataGrid" 
+                        AutoGenerateColumns="False" 
+                        ItemsSource="{Binding MigrationList}" 
+                        SelectedItem="{Binding SelectedMigration}" 
+                        CanUserAddRows="False" 
+                        CanUserResizeColumns="False" 
+                        CanUserResizeRows="False"
+                        CanUserReorderColumns="False" 
+                        Margin="5" 
+                        CanUserDeleteRows="False" 
+                        HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+                        VerticalScrollBarVisibility="Auto"
+                        Grid.Row="0" Grid.ColumnSpan="2">
+                        <DataGrid.Columns>
+                            <DataGridCheckBoxColumn Header="Накаченно" Width="80" IsReadOnly="True" Binding="{Binding Check}"></DataGridCheckBoxColumn>
+                            <DataGridTextColumn Header="Название версии" Width="auto" IsReadOnly="True" Binding="{Binding Name}"></DataGridTextColumn>
+                        </DataGrid.Columns>
 
-                    <DataGrid.Columns>
-                        <DataGridCheckBoxColumn Header="Накаченно" Width="80" IsReadOnly="True" Binding="{Binding Check}"></DataGridCheckBoxColumn>
-                        <DataGridTextColumn Header="Название версии" Width="auto" IsReadOnly="True" Binding="{Binding Name}"></DataGridTextColumn>
-                    </DataGrid.Columns>
+                        <DataGrid.ContextMenu>
+                            <ContextMenu >
+                                <MenuItem Header="Обновить до текущей версии" 
+                                          IsEnabled="{Binding ButtonsOnTabsIsEnabled}"
+                                          Command="{Binding UpdateDbToVersionCommand}" 
+                                          CommandParameter="{Binding ElementName=MainWindows, Path=(FocusManager.FocusedElement)}" />
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+                    </DataGrid>
 
-                    <DataGrid.ContextMenu>
-                        <ContextMenu >
-                            <MenuItem Header="Обновить до текущей версии" IsEnabled="{Binding UpdateDbToVersionBtnIsEnabled}" Command="{Binding UpdateDbToVersionCommand}" CommandParameter="{Binding ElementName=MainWindows, Path=(FocusManager.FocusedElement)}" />
-                        </ContextMenu>
-                    </DataGrid.ContextMenu>
-                </DataGrid>
-
-                <TextBlock x:Name="ResultUpdate" 
-                           Text="{Binding DbConnectAndDbUpdateStatus}"
-                           Foreground="DarkRed" 
-                           TextWrapping="Wrap" 
-                           Margin="5,0,5,5" 
-                           
-                           VerticalAlignment="Stretch"
-                           Grid.Row="1" Grid.Column="0"/>
-                <Button x:Name="UpdateDbToLastVersion"
-                        IsEnabled="{Binding UpdateDbToVersionBtnIsEnabled}"
+                    <TextBlock x:Name="ResultUpdate" 
+                        Text="{Binding DbConnectAndDbUpdateStatus}"
+                        Foreground="DarkRed" 
+                        TextWrapping="Wrap" 
+                        Margin="5,0,5,5"
+                        VerticalAlignment="Stretch"
+                        Grid.Row="1" Grid.Column="0"/>
+                    <Button x:Name="UpdateDbToLastVersion"
+                        IsEnabled="{Binding ButtonsOnTabsIsEnabled}"
                         Command="{Binding UpdateDbToLastVersionCommand}" 
                         Content="Обновить БД до последней версии"
                         HorizontalAlignment="Right"
@@ -101,8 +96,87 @@
                         MinWidth="200px" 
                         MinHeight="20px"
                         Grid.Row="1" Grid.Column="1"/>
-            </Grid>
-        </Border>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Добавить данные в БД">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>                    
+                    <Button x:Name="SelectFile"
+                        Command="{Binding SelectFileCommand}"                    
+                        IsEnabled="{Binding ButtonsOnTabsIsEnabled}"
+                        Content="Выбрать файл"
+                        HorizontalAlignment="Right"
+                        Margin="5,5,5,5"
+                        VerticalAlignment="Bottom"
+                        MinHeight="20px" MinWidth="100"
+                        Grid.Row="0" Grid.Column="2"/>
+                    <TextBlock x:Name="SelectedFile" 
+                        Text="{Binding SelectedFilePath}"
+                        Foreground="Black" 
+                        TextWrapping="Wrap" 
+                        Margin="5,0,5,5"
+                        VerticalAlignment="Stretch"
+                        Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"/>
+
+                    <DataGrid x:Name="TablesForUpdate" 
+                        AutoGenerateColumns="False" 
+                        ItemsSource="{Binding TableList}" 
+                        CanUserAddRows="False" 
+                        CanUserResizeColumns="False" 
+                        CanUserResizeRows="False"
+                        CanUserReorderColumns="False" 
+                        Margin="5" 
+                        CanUserDeleteRows="False" 
+                        HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+                        VerticalScrollBarVisibility="Auto"
+                        Grid.Row="1" Grid.ColumnSpan="3">
+                        <DataGrid.Columns>
+                            <DataGridCheckBoxColumn Header="Выбрать" Width="80" Binding="{Binding Check}">
+                                <DataGridCheckBoxColumn.HeaderTemplate>
+                                    <DataTemplate x:Name="dtAllChkBx">
+                                        <CheckBox Name="cbxAll" Content="Все" 
+                                                  DataContext="{Binding ElementName=TablesForUpdate, Path=DataContext}" 
+                                                  Command="{Binding CheckAllTablesInTableListCommand}" 
+                                                  IsChecked="{Binding IsTableChecked}">
+                                        </CheckBox>
+                                    </DataTemplate>
+                                </DataGridCheckBoxColumn.HeaderTemplate>
+                            </DataGridCheckBoxColumn>
+                            <DataGridTextColumn Header="Название таблицы" Width="auto" 
+                                                IsReadOnly="True" 
+                                                Binding="{Binding TableName}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <TextBlock x:Name="TablesUpdateStatus" 
+                        Text="{Binding TablesUpdateStatus}"
+                        Foreground="DarkRed" 
+                        TextWrapping="Wrap" 
+                        Margin="5,0,5,5"
+                        VerticalAlignment="Stretch"
+                        Grid.Row="2" Grid.Column="0"/>
+                    <Button x:Name="UpdateTables"                   
+                        Command="{Binding UpdateTablesCommand}"
+                        IsEnabled="{Binding ButtonsOnTabsIsEnabled}"
+                        Content="Обновить выбранные таблицы"
+                        HorizontalAlignment="Right"
+                        Margin="0,0,5,5"
+                        VerticalAlignment="Bottom"
+                        MinWidth="200px" 
+                        MinHeight="20px"
+                        Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
 
         <ProgressBar Height="18" Width="200" 
                      IsIndeterminate="True" 
