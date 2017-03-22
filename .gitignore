@@ -11,6 +11,7 @@ NLog.xsd
 *.sln.docstates
 *.dg
 .vs/config/
+appsettings.json
 
 
 # Build results
