@@ -70,8 +70,8 @@ namespace eRegistration
         /// Проверка прав при роутинге GUI.
         /// </summary>
         /// <param name="guidString">Поступивший запрос</param>
-        /// <param name="rights">Строка с правами разделенными ';'</param>
-        /// <returns>Доступно открыт или закрыт</returns>        
+        /// <param name="rights">Строка с правами разделенными ';' которым разрешен доступ</param>
+        /// <returns>Доступ открыт или закрыт</returns>        
         public bool CheckCookie(string guidString, string rights)
         {
             Guid guid;
@@ -135,8 +135,8 @@ namespace eRegistration
         /// Проверка прав на API.
         /// </summary>
         /// <param name="request">Поступивший запрос</param>
-        /// <param name="rights">Массив прав</param>
-        /// <returns>Доступно открыт или закрыт</returns>        
+        /// <param name="rights">Массив прав которым разрешен доступ</param>
+        /// <returns>Доступ открыт или закрыт</returns>        
         public bool CheckCookie(HttpRequest request, string[] rights)
         {
             var guidString = request.Headers["Authorization"];
