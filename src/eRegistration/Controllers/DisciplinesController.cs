@@ -22,13 +22,9 @@ namespace eRegistration.Controllers
         public Discipline Get(string id)
         {
             if (CookieList.GetInstance().CheckCookie(Request, new[]{ "IsWorker", "IsAdmin" })){return null;}
-            Discipline discipline;
-            using (var context = _context)
-            {
-                discipline = (from u in context.Discipline
+            Discipline discipline = (from u in _context.Discipline
                               where u.Id == new Guid(id)
                               select u).SingleOrDefault();
-            }
             return discipline;
         }
 
@@ -36,12 +32,8 @@ namespace eRegistration.Controllers
         public List<Discipline> GetAll()
         {
             if (CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsAdmin" })) { return null; }
-            List<Discipline> disciplines;
-            using (var context = _context)
-            {
-                disciplines = (from u in context.Discipline
+            List<Discipline> disciplines = (from u in _context.Discipline
                                select u).ToList();
-            }
             return disciplines;
         }
 
@@ -49,14 +41,11 @@ namespace eRegistration.Controllers
         public bool Update([FromBody] Discipline discipline)
         {
             if (CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsAdmin" })) { return false; }
-            Discipline disciplineFromDb;
-            using (var context = _context)
-            {
-                //TODO Может вылетать из-за того что discipline.Id не GUID
-                disciplineFromDb = (from u in context.Discipline
+                            
+            //TODO Может вылетать из-за того что discipline.Id не GUID    
+            Discipline disciplineFromDb = (from u in _context.Discipline
                                     where u.Id == discipline.Id
                                     select u).SingleOrDefault();
-            }
             if (disciplineFromDb != null)
             {
                 _context.Discipline.Remove(disciplineFromDb);
@@ -71,15 +60,12 @@ namespace eRegistration.Controllers
         [HttpPost]
         public bool Create([FromBody] Discipline discipline)
         {
-            if (CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsAdmin" })) { return false; }
-            Discipline disciplineFromDb;
-            using (var context = _context)
-            {
-                //TODO Может вылетать из-за того что discipline.Id не GUID
-                disciplineFromDb = (from u in context.Discipline
+            if (CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsAdmin" })) { return false; }   
+
+            //TODO Может вылетать из-за того что discipline.Id не GUID
+            Discipline disciplineFromDb = (from u in _context.Discipline
                                     where u.Id == discipline.Id
                                     select u).SingleOrDefault();
-            }
             if (disciplineFromDb == null)
             {
                 _context.Discipline.Add(discipline);
@@ -92,15 +78,12 @@ namespace eRegistration.Controllers
         [HttpGet("{id}")]
         public bool Delete(string id)
         {
-            if (CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsAdmin" })) { return false; }
-            Discipline disciplineFromDb;
-            using (var context = _context)
-            {
-                //TODO Может вылетать из-за того что discipline.Id не GUID
-                disciplineFromDb = (from u in context.Discipline
+            if (CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsAdmin" })) { return false; }  
+                         
+            //TODO Может вылетать из-за того что discipline.Id не GUID
+            Discipline disciplineFromDb = (from u in _context.Discipline
                                     where u.Id == new Guid(id)
                                     select u).SingleOrDefault();
-            }
             if (disciplineFromDb != null)
             {
                 _context.Discipline.Remove(disciplineFromDb);

@@ -23,13 +23,9 @@ namespace eRegistration.Controllers
         public Faculty Get(string id)
         {
             if (CookieList.GetInstance().CheckCookie(Request, new[]{ "IsWorker", "IsAdmin" })){return null;}
-            Faculty faculty;
-            using (var context = _context)
-            {
-                faculty = (from u in context.Faculty
+            Faculty faculty = (from u in _context.Faculty
                               where u.Id == new Guid(id)
                               select u).SingleOrDefault();
-            }
             return faculty;
         }
 
@@ -37,12 +33,8 @@ namespace eRegistration.Controllers
         public List<Faculty> GetAll()
         {
             if (CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsAdmin" })) { return null; }
-            List<Faculty> faculties;
-            using (var context = _context)
-            {
-                faculties = (from u in context.Faculty
+            List<Faculty> faculties = (from u in _context.Faculty
                                select u).ToList();
-            }
             return faculties;
         }
 
@@ -50,14 +42,9 @@ namespace eRegistration.Controllers
         public bool Update([FromBody] Faculty faculty)
         {
             if (CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsAdmin" })) { return false; }
-            Faculty facultyFromDb;
-            using (var context = _context)
-            {
-                //TODO Может вылетать из-за того что Faculty.Id не GUID
-                facultyFromDb = (from u in context.Faculty
+            Faculty facultyFromDb = (from u in _context.Faculty
                                     where u.Id == faculty.Id
                                     select u).SingleOrDefault();
-            }
             if (facultyFromDb != null)
             {
                 _context.Faculty.Remove(facultyFromDb);
@@ -73,14 +60,9 @@ namespace eRegistration.Controllers
         public bool Create([FromBody] Faculty faculty)
         {
             if (CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsAdmin" })) { return false; }
-            Faculty facultyFromDb;
-            using (var context = _context)
-            {
-                //TODO Может вылетать из-за того что Faculty.Id не GUID
-                facultyFromDb = (from u in context.Faculty
+            Faculty facultyFromDb = (from u in _context.Faculty
                                     where u.Id == faculty.Id
                                     select u).SingleOrDefault();
-            }
             if (facultyFromDb == null)
             {
                 _context.Faculty.Add(faculty);
@@ -94,14 +76,9 @@ namespace eRegistration.Controllers
         public bool Delete(string id)
         {
             if (CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsAdmin" })) { return false; }
-            Faculty facultyFromDb;
-            using (var context = _context)
-            {
-                //TODO Может вылетать из-за того что Faculty.Id не GUID
-                facultyFromDb = (from u in context.Faculty
+            Faculty facultyFromDb = (from u in _context.Faculty
                                     where u.Id == new Guid(id)
                                     select u).SingleOrDefault();
-            }
             if (facultyFromDb != null)
             {
                 _context.Faculty.Remove(facultyFromDb);

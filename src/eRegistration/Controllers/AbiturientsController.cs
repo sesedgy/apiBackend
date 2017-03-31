@@ -23,13 +23,9 @@ namespace eRegistration.Controllers
         [HttpGet("{id}")]
         public Abiturient Get(string id)
         {
-            Abiturient abiturient;
-            using (var context = _context)
-            {
-                abiturient = (from u in context.Abiturients
+            Abiturient abiturient = (from u in _context.Abiturients
                     where u.Id == new Guid(id)
                     select u).SingleOrDefault();
-            }
             return abiturient;
         }
 

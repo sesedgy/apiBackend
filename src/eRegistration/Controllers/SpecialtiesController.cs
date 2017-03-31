@@ -20,12 +20,8 @@ namespace eRegistration.Controllers
         [HttpGet]
         public List<Specialty> GetAll()
         {
-            List<Specialty> specialty;
-            using (var context = _context)
-            {
-                specialty = (from u in context.Specialities
+            List<Specialty> specialty = (from u in _context.Specialities
                               select u).ToList();
-            }
             return specialty;
         }
 
@@ -33,12 +29,8 @@ namespace eRegistration.Controllers
         [HttpGet]
         public List<Specialty> GetAllSpecialties()
         {
-            List<Specialty> specialty;
-            using (var context = _context)
-            {
-                specialty = (from u in context.Specialities
+            List<Specialty> specialty = (from u in _context.Specialities
                               select u).Distinct().ToList();
-            }
             return specialty;
         }
 
