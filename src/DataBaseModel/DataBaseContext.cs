@@ -16,6 +16,7 @@ namespace DataBaseModel
         public DbSet<Teacher> Teacher { get; set; }
         public DbSet<TeachersTypesWork> TeachersTypesWork { get; set; }
         public DbSet<TeachersWork> TeachersWork { get; set; }
+        public DbSet<Faculty> Faculty { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -26,6 +27,7 @@ namespace DataBaseModel
             modelBuilder.Entity<Teacher>().ToTable("Teacher");
             modelBuilder.Entity<TeachersTypesWork>().ToTable("TeachersTypesWork");
             modelBuilder.Entity<TeachersWork>().ToTable("TeachersWork");
+            modelBuilder.Entity<Faculty>().ToTable("Faculty");
         }
     }
 

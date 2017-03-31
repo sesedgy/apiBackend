@@ -37,7 +37,7 @@ namespace DataBaseModel.Models
         public DateTime DateEducationDocument { get; set; }
         public string WhoGiveEducationDocument { get; set; }
 
-        public string Faculty { get; set; }                     //Факультет
+        public Guid FacultyId { get; set; }                     //Факультет
         public string Speciality { get; set; }                  //Специальность
         public string Scientist { get; set; }                   //Ученая степень
         public DateTime BeginDate { get; set; }                 //Дата начала работы

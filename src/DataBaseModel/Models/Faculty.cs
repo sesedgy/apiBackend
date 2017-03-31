@@ -2,13 +2,11 @@
 
 namespace DataBaseModel.Models
 {
-    public class Discipline
+    public class Faculty
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public string ShortName { get; set; }
-        public Guid FacultyId { get; set; }
-        public string StatusDiscipline { get; set; }
+        public Guid ChiefId { get; set; }     // Начальник
 
         public Guid WhoUpdate { get; set; }
         public DateTime CreatedDate { get; set; }

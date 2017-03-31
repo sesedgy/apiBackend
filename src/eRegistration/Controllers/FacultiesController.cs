@@ -11,58 +11,58 @@ using Microsoft.AspNetCore.Mvc;
 namespace eRegistration.Controllers
 {
     [Route("api/[controller]/[action]")]
-    public class DisciplineController : Controller
+    public class FacultiesController : Controller
     {
         private readonly DataBaseContext _context;
-        public DisciplineController(DataBaseContext context)
+        public FacultiesController(DataBaseContext context)
         {
             _context = context;
         }
 
         [HttpGet("{id}")]
-        public Discipline Get(string id)
+        public Faculty Get(string id)
         {
             if (CookieList.GetInstance().CheckCookie(Request, new[]{ "IsWorker", "IsAdmin" })){return null;}
-            Discipline discipline;
+            Faculty faculty;
             using (var context = _context)
             {
-                discipline = (from u in context.Discipline
+                faculty = (from u in context.Faculty
                               where u.Id == new Guid(id)
                               select u).SingleOrDefault();
             }
-            return discipline;
+            return faculty;
         }
 
         [HttpGet("{id}")]
-        public List<Discipline> GetAll()
+        public List<Faculty> GetAll()
         {
             if (CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsAdmin" })) { return null; }
-            List<Discipline> disciplines;
+            List<Faculty> faculties;
             using (var context = _context)
             {
-                disciplines = (from u in context.Discipline
+                faculties = (from u in context.Faculty
                                select u).ToList();
             }
-            return disciplines;
+            return faculties;
         }
 
         [HttpPost]
-        public bool Update([FromBody] Discipline discipline)
+        public bool Update([FromBody] Faculty faculty)
         {
             if (CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsAdmin" })) { return false; }
-            Discipline disciplineFromDb;
+            Faculty facultyFromDb;
             using (var context = _context)
             {
-                //TODO Может вылетать из-за того что discipline.Id не GUID
-                disciplineFromDb = (from u in context.Discipline
-                                    where u.Id == discipline.Id
+                //TODO Может вылетать из-за того что Faculty.Id не GUID
+                facultyFromDb = (from u in context.Faculty
+                                    where u.Id == faculty.Id
                                     select u).SingleOrDefault();
             }
-            if (disciplineFromDb != null)
+            if (facultyFromDb != null)
             {
-                _context.Discipline.Remove(disciplineFromDb);
+                _context.Faculty.Remove(facultyFromDb);
                 //TODO Может вылетать если мы удаляем и сразу добавляем не сохранившись
-                _context.Discipline.Add(discipline);
+                _context.Faculty.Add(faculty);
                 _context.SaveChanges();
                 return true;
             }
@@ -70,20 +70,20 @@ namespace eRegistration.Controllers
         }
 
         [HttpPost]
-        public bool Create([FromBody] Discipline discipline)
+        public bool Create([FromBody] Faculty faculty)
         {
             if (CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsAdmin" })) { return false; }
-            Discipline disciplineFromDb;
+            Faculty facultyFromDb;
             using (var context = _context)
             {
-                //TODO Может вылетать из-за того что discipline.Id не GUID
-                disciplineFromDb = (from u in context.Discipline
-                                    where u.Id == discipline.Id
+                //TODO Может вылетать из-за того что Faculty.Id не GUID
+                facultyFromDb = (from u in context.Faculty
+                                    where u.Id == faculty.Id
                                     select u).SingleOrDefault();
             }
-            if (disciplineFromDb == null)
+            if (facultyFromDb == null)
             {
-                _context.Discipline.Add(discipline);
+                _context.Faculty.Add(faculty);
                 _context.SaveChanges();
                 return true;
             }
@@ -94,17 +94,17 @@ namespace eRegistration.Controllers
         public bool Delete(string id)
         {
             if (CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsAdmin" })) { return false; }
-            Discipline disciplineFromDb;
+            Faculty facultyFromDb;
             using (var context = _context)
             {
-                //TODO Может вылетать из-за того что discipline.Id не GUID
-                disciplineFromDb = (from u in context.Discipline
+                //TODO Может вылетать из-за того что Faculty.Id не GUID
+                facultyFromDb = (from u in context.Faculty
                                     where u.Id == new Guid(id)
                                     select u).SingleOrDefault();
             }
-            if (disciplineFromDb != null)
+            if (facultyFromDb != null)
             {
-                _context.Discipline.Remove(disciplineFromDb);
+                _context.Faculty.Remove(facultyFromDb);
                 _context.SaveChanges();
                 return true;
             }
