@@ -24,7 +24,7 @@ namespace eRegistration.Controllers
         public Abiturient Get(string id)
         {
             Abiturient abiturient = (from u in _context.Abiturients
-                    where u.Id == new Guid(id)
+                    where u.AbiturientId == new Guid(id)
                     select u).SingleOrDefault();
             return abiturient;
         }

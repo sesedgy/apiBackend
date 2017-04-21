@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace DataBaseModel.Models
 {
-    public class Teacher
+    public class Employee
     {
-        public Guid TeacherId { get; set; }
+        public Guid EmployeeId { get; set; }
         [Required]
         public virtual User User { get; set; }
         public string LastName { get; set; }
@@ -40,15 +42,12 @@ namespace DataBaseModel.Models
         public DateTime DateEducationDocument { get; set; }
         public string WhoGiveEducationDocument { get; set; }
 
-        public virtual Faculty Faculty { get; set; }                    //Факультет
-        public string Speciality { get; set; }                          //Специальность
-        public string Scientist { get; set; }                           //Ученая степень
-        public DateTime BeginDate { get; set; }                         //Дата начала работы
+        public virtual Department Department { get; set; }                  //Отдел
+        public string Position { get; set; }                        //Должность
+        public DateTime BeginDate { get; set; }                     //Дата начала работы
         public DateTime EndDate { get; set; }
 
-        public List<TeachersWork> TeachersWorks { get; set; }
-
-        public string SalaryPerHour { get; set; }               //Почасовая ставка
+        public string SalaryPerHour { get; set; }                   //Почасовая ставка
         public string PhotoPath { get; set; }
         public string Status { get; set; }
 

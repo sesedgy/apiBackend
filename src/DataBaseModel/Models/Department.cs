@@ -1,18 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace DataBaseModel.Models
 {
-    public class Discipline
+    public class Department
     {
-        public Guid DisciplineId { get; set; }
+        public Guid DepartmentId { get; set; }
         public string Name { get; set; }
-        public string ShortName { get; set; }
-        public virtual Faculty Faculty { get; set; }
-        public string StatusDiscipline { get; set; }
+        public List<Employee> Employees { get; set; }
 
         public string WhoUpdate { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
-
     }
 }

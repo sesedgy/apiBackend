@@ -1,11 +1,13 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace DataBaseModel.Models
 {
     public class Abiturient
     {
-        public Guid Id { get; set; }
-        public Guid UserId { get; set; }
+        public Guid AbiturientId { get; set; }
+        [Required]
+        public virtual User User { get; set; }
         public string LastName { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
@@ -102,7 +104,7 @@ namespace DataBaseModel.Models
         public string MilitaryTicketCodeVus { get; set; }
         public string MilitaryTicketMilitaryOffice { get; set; }    //Где стоит на учете
 
-        public Guid WhoUpdate { get; set; }
+        public string WhoUpdate { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
 

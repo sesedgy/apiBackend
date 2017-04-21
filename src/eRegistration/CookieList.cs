@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using DataBaseModel;
 using DataBaseModel.Models;
+using eRegistration.Controllers;
 using Microsoft.AspNetCore.Http;
 
 namespace eRegistration
@@ -32,14 +34,14 @@ namespace eRegistration
         {
             foreach (var item in _dictionary)
             {
-                if (item.Value.UserId == user.Id)
+                if (item.Value.User.UserId == user.UserId)
                 {
                     _dictionary.Remove(item.Key);
                     break;
                 }
             }
             var guid = Guid.NewGuid();
-            var cookie = new Cookie() {Id = guid, UserId = user.Id,};
+            var cookie = new Cookie() {CookieId = guid, User = user};
             switch (user.Role)
             {
                 case "IsAbiturient":
@@ -138,12 +140,11 @@ namespace eRegistration
         /// <param name="rights">Массив прав которым разрешен доступ</param>
         /// <returns>Доступ открыт или закрыт</returns>        
         public bool CheckCookie(HttpRequest request, string[] rights)
-        {
-            var guidString = request.Headers["Authorization"];
+        {                                                                             
             Guid guid;
             try
             {
-                guid = new Guid(guidString);
+                guid = new Guid(request.Headers["Authorization"]);
             }
             catch (Exception)
             {

@@ -8,8 +8,8 @@ using DataBaseModel;
 namespace DataBaseModel.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    [Migration("20170329163311_Teachers")]
-    partial class Teachers
+    [Migration("20170417135316_CreateDatabase")]
+    partial class CreateDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -19,7 +19,7 @@ namespace DataBaseModel.Migrations
 
             modelBuilder.Entity("DataBaseModel.Models.Abiturient", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("AbiturientId")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("ActualAddress");
@@ -208,11 +208,12 @@ namespace DataBaseModel.Migrations
 
                     b.Property<DateTime>("UpdatedDate");
 
-                    b.Property<Guid>("UserId");
+                    b.Property<Guid?>("UserId")
+                        .IsRequired();
 
                     b.Property<string>("WhoGiveEducationDocument");
 
-                    b.Property<Guid>("WhoUpdate");
+                    b.Property<string>("WhoUpdate");
 
                     b.Property<string>("СertificateOfMilitaryNumber");
 
@@ -220,19 +221,39 @@ namespace DataBaseModel.Migrations
 
                     b.Property<string>("СertificateOfMilitarySeries");
 
-                    b.HasKey("Id");
+                    b.HasKey("AbiturientId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Abiturient");
                 });
 
-            modelBuilder.Entity("DataBaseModel.Models.Discipline", b =>
+            modelBuilder.Entity("DataBaseModel.Models.Department", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("DepartmentId")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("CreatedDate");
 
-                    b.Property<string>("Faculty");
+                    b.Property<string>("Name");
+
+                    b.Property<DateTime>("UpdatedDate");
+
+                    b.Property<string>("WhoUpdate");
+
+                    b.HasKey("DepartmentId");
+
+                    b.ToTable("Department");
+                });
+
+            modelBuilder.Entity("DataBaseModel.Models.Discipline", b =>
+                {
+                    b.Property<Guid>("DisciplineId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<Guid?>("FacultyId");
 
                     b.Property<string>("Name");
 
@@ -242,17 +263,160 @@ namespace DataBaseModel.Migrations
 
                     b.Property<DateTime>("UpdatedDate");
 
-                    b.Property<Guid>("WhoUpdate");
+                    b.Property<string>("WhoUpdate");
 
-                    b.HasKey("Id");
+                    b.HasKey("DisciplineId");
+
+                    b.HasIndex("FacultyId");
 
                     b.ToTable("Discipline");
                 });
 
+            modelBuilder.Entity("DataBaseModel.Models.Employee", b =>
+                {
+                    b.Property<Guid>("EmployeeId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("BeginDate");
+
+                    b.Property<DateTime>("BirthDate");
+
+                    b.Property<string>("BuildingRegistration");
+
+                    b.Property<string>("Citizenship");
+
+                    b.Property<string>("CityRegistration");
+
+                    b.Property<string>("CountryRegistration");
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<DateTime>("DateEducationDocument");
+
+                    b.Property<Guid?>("DepartmentId");
+
+                    b.Property<string>("DistrictRegistration");
+
+                    b.Property<DateTime>("EndDate");
+
+                    b.Property<string>("FirstName");
+
+                    b.Property<string>("FlatRegistration");
+
+                    b.Property<string>("HouseRegistration");
+
+                    b.Property<string>("HousingRegistration");
+
+                    b.Property<string>("INN");
+
+                    b.Property<string>("IndexRegistration");
+
+                    b.Property<string>("LastName");
+
+                    b.Property<string>("LocalityRegistration");
+
+                    b.Property<string>("MiddleName");
+
+                    b.Property<string>("MobilePhone");
+
+                    b.Property<string>("NumberEducationDocument");
+
+                    b.Property<DateTime>("PassportDate");
+
+                    b.Property<string>("PassportIssueOrg");
+
+                    b.Property<string>("PassportNumber");
+
+                    b.Property<string>("PassportSeries");
+
+                    b.Property<string>("PhotoPath");
+
+                    b.Property<string>("Position");
+
+                    b.Property<string>("RegionRegistration");
+
+                    b.Property<string>("SNILS");
+
+                    b.Property<string>("SalaryPerHour");
+
+                    b.Property<string>("SeriesEducationDocument");
+
+                    b.Property<string>("Sex");
+
+                    b.Property<string>("Status");
+
+                    b.Property<string>("StreetRegistration");
+
+                    b.Property<DateTime>("UpdatedDate");
+
+                    b.Property<Guid?>("UserId")
+                        .IsRequired();
+
+                    b.Property<string>("WhoGiveEducationDocument");
+
+                    b.Property<string>("WhoUpdate");
+
+                    b.HasKey("EmployeeId");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Employee");
+                });
+
+            modelBuilder.Entity("DataBaseModel.Models.Faculty", b =>
+                {
+                    b.Property<Guid>("FacultyId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<string>("Name");
+
+                    b.Property<DateTime>("UpdatedDate");
+
+                    b.Property<string>("WhoUpdate");
+
+                    b.HasKey("FacultyId");
+
+                    b.ToTable("Faculty");
+                });
+
+            modelBuilder.Entity("DataBaseModel.Models.Group", b =>
+                {
+                    b.Property<Guid>("GroupId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("Begin");
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Semester");
+
+                    b.Property<Guid?>("SpecialtyId");
+
+                    b.Property<string>("Status");
+
+                    b.Property<DateTime>("UpdatedDate");
+
+                    b.Property<string>("WhoUpdate");
+
+                    b.HasKey("GroupId");
+
+                    b.HasIndex("SpecialtyId");
+
+                    b.ToTable("Group");
+                });
+
             modelBuilder.Entity("DataBaseModel.Models.Specialty", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("SpecialtyId")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("CodeSpecialty");
 
                     b.Property<string>("FormOfEducation");
 
@@ -260,14 +424,33 @@ namespace DataBaseModel.Migrations
 
                     b.Property<string>("Qualification");
 
-                    b.HasKey("Id");
+                    b.HasKey("SpecialtyId");
 
                     b.ToTable("Specialty");
                 });
 
+            modelBuilder.Entity("DataBaseModel.Models.Student", b =>
+                {
+                    b.Property<Guid>("StudentId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid?>("GroupId");
+
+                    b.Property<Guid?>("UserId")
+                        .IsRequired();
+
+                    b.HasKey("StudentId");
+
+                    b.HasIndex("GroupId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Student");
+                });
+
             modelBuilder.Entity("DataBaseModel.Models.Teacher", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("TeacherId")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("BeginDate");
@@ -290,7 +473,7 @@ namespace DataBaseModel.Migrations
 
                     b.Property<DateTime>("EndDate");
 
-                    b.Property<string>("Faculty");
+                    b.Property<Guid?>("FacultyId");
 
                     b.Property<string>("FirstName");
 
@@ -344,56 +527,67 @@ namespace DataBaseModel.Migrations
 
                     b.Property<DateTime>("UpdatedDate");
 
-                    b.Property<Guid>("UserId");
+                    b.Property<Guid?>("UserId")
+                        .IsRequired();
 
                     b.Property<string>("WhoGiveEducationDocument");
 
-                    b.Property<Guid>("WhoUpdate");
+                    b.Property<string>("WhoUpdate");
 
-                    b.HasKey("Id");
+                    b.HasKey("TeacherId");
+
+                    b.HasIndex("FacultyId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Teacher");
                 });
 
             modelBuilder.Entity("DataBaseModel.Models.TeachersTypesWork", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("TeachersTypesWorkId")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Name");
 
                     b.Property<string>("PercentLoad");
 
-                    b.HasKey("Id");
+                    b.HasKey("TeachersTypesWorkId");
 
                     b.ToTable("TeachersTypesWork");
                 });
 
             modelBuilder.Entity("DataBaseModel.Models.TeachersWork", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("TeachersWorkId")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Curs");
 
-                    b.Property<Guid>("GroupId");
+                    b.Property<Guid?>("GroupId");
 
                     b.Property<string>("HoursWork");
 
                     b.Property<string>("Semester");
 
-                    b.Property<Guid>("TeacherId");
+                    b.Property<Guid?>("TeacherId");
 
-                    b.Property<Guid>("TeachersTypeWorkId");
+                    b.Property<Guid?>("TeachersTypesWorkId");
 
-                    b.HasKey("Id");
+                    b.HasKey("TeachersWorkId");
+
+                    b.HasIndex("GroupId");
+
+                    b.HasIndex("TeacherId");
+
+                    b.HasIndex("TeachersTypesWorkId");
 
                     b.ToTable("TeachersWork");
                 });
 
             modelBuilder.Entity("DataBaseModel.Models.User", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("UserId")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("CreatedDate");
@@ -401,8 +595,6 @@ namespace DataBaseModel.Migrations
                     b.Property<string>("Email");
 
                     b.Property<string>("HashSalt");
-
-                    b.Property<Guid>("IdClient");
 
                     b.Property<bool>("IsOnline");
 
@@ -418,9 +610,82 @@ namespace DataBaseModel.Migrations
 
                     b.Property<string>("WhoUpdate");
 
-                    b.HasKey("Id");
+                    b.HasKey("UserId");
 
                     b.ToTable("User");
+                });
+
+            modelBuilder.Entity("DataBaseModel.Models.Abiturient", b =>
+                {
+                    b.HasOne("DataBaseModel.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("DataBaseModel.Models.Discipline", b =>
+                {
+                    b.HasOne("DataBaseModel.Models.Faculty", "Faculty")
+                        .WithMany("Disciplines")
+                        .HasForeignKey("FacultyId");
+                });
+
+            modelBuilder.Entity("DataBaseModel.Models.Employee", b =>
+                {
+                    b.HasOne("DataBaseModel.Models.Department", "Department")
+                        .WithMany("Employees")
+                        .HasForeignKey("DepartmentId");
+
+                    b.HasOne("DataBaseModel.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("DataBaseModel.Models.Group", b =>
+                {
+                    b.HasOne("DataBaseModel.Models.Specialty", "Specialty")
+                        .WithMany("Groups")
+                        .HasForeignKey("SpecialtyId");
+                });
+
+            modelBuilder.Entity("DataBaseModel.Models.Student", b =>
+                {
+                    b.HasOne("DataBaseModel.Models.Group")
+                        .WithMany("Student")
+                        .HasForeignKey("GroupId");
+
+                    b.HasOne("DataBaseModel.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("DataBaseModel.Models.Teacher", b =>
+                {
+                    b.HasOne("DataBaseModel.Models.Faculty", "Faculty")
+                        .WithMany("Teachers")
+                        .HasForeignKey("FacultyId");
+
+                    b.HasOne("DataBaseModel.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("DataBaseModel.Models.TeachersWork", b =>
+                {
+                    b.HasOne("DataBaseModel.Models.Group", "Group")
+                        .WithMany("TeachersWorks")
+                        .HasForeignKey("GroupId");
+
+                    b.HasOne("DataBaseModel.Models.Teacher", "Teacher")
+                        .WithMany("TeachersWorks")
+                        .HasForeignKey("TeacherId");
+
+                    b.HasOne("DataBaseModel.Models.TeachersTypesWork", "TeachersTypesWork")
+                        .WithMany("TeachersWorks")
+                        .HasForeignKey("TeachersTypesWorkId");
                 });
         }
     }

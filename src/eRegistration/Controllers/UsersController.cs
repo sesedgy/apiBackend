@@ -8,8 +8,6 @@ using DataBaseModel.Models;
 using eRegistration.CommonServices;
 using Microsoft.AspNetCore.Mvc;
 
-// For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace eRegistration.Controllers
 {
     [Route("api/[controller]/[action]")]
@@ -49,6 +47,13 @@ namespace eRegistration.Controllers
                 return true;
             }
             return false;
+        }
+
+        public User GetUser(Guid id)
+        {
+            return (from u in _context.Users
+                    where u.UserId == id
+                    select u).SingleOrDefault();
         }
 
         //TODO Шифрование пароля на клиенте

@@ -2,15 +2,15 @@
 
 namespace DataBaseModel.Models
 {
-    public class TeachersWork                   //Нагрузка на преподавателя
+    public class TeachersWork                                       //Нагрузка на преподавателя
     {
-        public Guid Id { get; set; }
-        public Guid TeacherId { get; set; }
-        public Guid TeachersTypeWorkId { get; set; }     //Вид нагрузки
-        public Guid GroupId { get; set; }
-        public string Curs { get; set; }                 //Курс
-        public string Semester { get; set; }             //Семестр
-        public string HoursWork { get; set; }            //Часы работы
+        public Guid TeachersWorkId { get; set; }
+        public virtual Teacher Teacher { get; set; }
+        public virtual TeachersTypesWork TeachersTypesWork { get; set; }    //Вид нагрузки
+        public virtual Group Group { get; set; }
+        public string Curs { get; set; }                            //Курс
+        public string Semester { get; set; }                        //Семестр
+        public string HoursWork { get; set; }                       //Часы работы
 
     }
 }
