@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace DataBaseModel.Models
 {
@@ -7,6 +8,7 @@ namespace DataBaseModel.Models
         public Guid DisciplineId { get; set; }
         public string Name { get; set; }
         public string ShortName { get; set; }
+        [Required]
         public virtual Faculty Faculty { get; set; }
         public string StatusDiscipline { get; set; }
 

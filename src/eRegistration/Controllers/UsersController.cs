@@ -146,5 +146,71 @@ namespace eRegistration.Controllers
             return false;
         }
 
+        [HttpGet("{login}&{newEmail}")]
+        public IActionResult ChangeEmail(string login, string newEmail)
+        {
+            if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsAdmin", "IsTeacher", "IsStudentLeader", "IsStudent", "IsAbiturient" }))
+            {
+                return Unauthorized();
+            }
+
+            User userFromDb = (from u in _context.Users
+                               where u.Login == login
+                               select u).SingleOrDefault();
+            if (userFromDb != null)
+            {
+                userFromDb.Email = newEmail;
+                _context.Update(userFromDb);
+                _context.SaveChanges();
+                return Ok();
+            }
+            return BadRequest();
+        }
+
+        [HttpGet("{email}&{newLogin}")]
+        public IActionResult ChangeLogin(string email, string newLogin)
+        {
+            if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsAdmin", "IsTeacher", "IsStudentLeader", "IsStudent", "IsAbiturient" }))
+            {
+                return Unauthorized();
+            }
+
+            User userFromDb = (from u in _context.Users
+                               where u.Email == email
+                               select u).SingleOrDefault();
+            if (userFromDb != null)
+            {
+                userFromDb.Login = newLogin;
+                _context.Update(userFromDb);
+                _context.SaveChanges();
+                return Ok();
+            }
+            return BadRequest();
+
+        }
+
+        [HttpGet("{login}&{newPassword}")]
+        public IActionResult ChangePassword(string login, string newPassword)
+        {
+            if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsAdmin", "IsTeacher", "IsStudentLeader", "IsStudent", "IsAbiturient" }))
+            {
+                return Unauthorized();
+            }
+
+            User userFromDb = (from u in _context.Users
+                               where u.Login == login
+                               select u).SingleOrDefault();
+            if (userFromDb != null)
+            {
+                userFromDb.Password = newPassword;
+                _context.Update(userFromDb);
+                _context.SaveChanges();
+                return Ok();
+            }
+            return BadRequest();
+
+        }
+
+
     }
 }

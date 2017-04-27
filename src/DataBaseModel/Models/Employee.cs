@@ -42,6 +42,7 @@ namespace DataBaseModel.Models
         public DateTime DateEducationDocument { get; set; }
         public string WhoGiveEducationDocument { get; set; }
 
+        [Required]
         public virtual Department Department { get; set; }                  //Отдел
         public string Position { get; set; }                        //Должность
         public DateTime BeginDate { get; set; }                     //Дата начала работы

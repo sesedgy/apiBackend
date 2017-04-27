@@ -42,8 +42,20 @@ namespace eRegistration.Controllers
             {
                 return null;
             }
-            List<Discipline> disciplines = (from u in _context.Discipline
-                select u).Include(u => u.Faculty).ToList();
+            //List<Discipline> disciplines = (from u in _context.Discipline
+            //    select u).Include(u => u.Faculty).ToList();
+            var disciplines = from u in _context.Discipline
+                              select new
+                              {
+                                  u.DisciplineId,
+                                  u.Name,
+                                  u.ShortName,
+                                  u.Faculty,
+                                  u.StatusDiscipline,
+                                  u.WhoUpdate,
+                                  u.CreatedDate,
+                                  u.UpdatedDate,
+                              };
 
             var serializerSettings = new JsonSerializerSettings { PreserveReferencesHandling = PreserveReferencesHandling.Objects };
             string json = JsonConvert.SerializeObject(disciplines, Formatting.Indented, serializerSettings);
@@ -121,10 +133,20 @@ namespace eRegistration.Controllers
         [HttpGet("")]
         public object Test()
         {
-            List<Discipline> disciplines = (from u in _context.Discipline
-                                            select u)
-                                            .Include(u => u.Faculty)
-                                            .ToList();
+            var disciplines = from u in _context.Discipline
+                                           select new
+                                           {
+                                               u.Name,
+                                               u.Faculty
+                                           };
+      //      List<Discipline> disciplines = _context.Discipline
+      //          .Join(_context.Faculty,         // target
+      //c => c.CategoryId,          // FK
+      //cm => cm.ChildCategoryId,   // PK
+      //(c, cm) => new { Category = c, CategoryMaps = cm })
+      //                                      .Include(u => u.Faculty)
+      //                                      .Select(u => u.Faculty.Name).ToList();
+                                            
             if (disciplines != null)
             {
                 //var a = new Discipline();
@@ -142,7 +164,7 @@ namespace eRegistration.Controllers
                 string json;
                 try
                 {
-                    var serializerSettings = new JsonSerializerSettings { PreserveReferencesHandling = PreserveReferencesHandling.Objects };
+                    var serializerSettings = new JsonSerializerSettings { PreserveReferencesHandling = PreserveReferencesHandling.Objects};
                     json = JsonConvert.SerializeObject(disciplines, Formatting.Indented, serializerSettings);
                 }
                 catch (Exception exception)

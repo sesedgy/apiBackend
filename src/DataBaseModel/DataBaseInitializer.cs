@@ -11,7 +11,7 @@ namespace DataBaseModel
 
             //var students = new User[]
             //{
-            //    new User{Id = new Guid(), Login= "sesedgy", Password= "1ffb1885ba2ebca902a894a5c3e316f720af126b9c418672a987e39b57436757", HashSalt = "8e35c2cd3bf6641bdb0e2050b76932cbb2e6034a0ddacc1d9bea82a6ba57f7cf", CreatedDate = DateTime.Now, Email = "Email", IsOnline = false, LastActivityDate = DateTime.Now, Role = "administrator", UpdatedDate = DateTime.Now, WhoUpdate = "whoupdate"},
+            //    new User{UserId = new Guid(), Login= "sesedgy", Password= "bb520b241507b1ff3de47a41697ad405c2c7752fe26fa23419160e2e479c6aab", HashSalt = "3f3ef786b34d6dd716e1812c8b74a7a0e1f05aa5f3230588f6f5bcd00c6c8392", CreatedDate = DateTime.Now, Email = "Email", IsOnline = false, LastActivityDate = DateTime.Now, Role = "IsAdmin", UpdatedDate = DateTime.Now, WhoUpdate = "whoupdate"},
             //};
             //foreach (User s in students)
             //{
