@@ -140,7 +140,7 @@ namespace eRegistration
         /// <param name="rights">Массив прав которым разрешен доступ</param>
         /// <returns>Доступ открыт или закрыт</returns>        
         public bool CheckCookie(HttpRequest request, string[] rights)
-        {                                                                             
+        {
             Guid guid;
             try
             {
@@ -157,26 +157,59 @@ namespace eRegistration
                 switch (t)
                 {
                     case "IsAbiturient":
-                        if (cookie.IsAbiturient) { return true; }
+                        if (cookie.IsAbiturient)
+                        {
+                            return true;
+                        }
                         break;
                     case "IsStudent":
-                        if (cookie.IsStudent) { return true; }
+                        if (cookie.IsStudent)
+                        {
+                            return true;
+                        }
                         break;
                     case "IsStudentLeader":
-                        if (cookie.IsStudentLeader) { return true; }
+                        if (cookie.IsStudentLeader)
+                        {
+                            return true;
+                        }
                         break;
                     case "IsTeacher":
-                        if (cookie.IsTeacher) { return true; }
+                        if (cookie.IsTeacher)
+                        {
+                            return true;
+                        }
                         break;
                     case "IsWorker":
-                        if (cookie.IsWorker) { return true; }
+                        if (cookie.IsWorker)
+                        {
+                            return true;
+                        }
                         break;
                     case "IsAdmin":
-                        if (cookie.IsAdmin) { return true; }
+                        if (cookie.IsAdmin)
+                        {
+                            return true;
+                        }
                         break;
                 }
             }
             return false;
-        }        
+        }
+
+        public User GetUser(HttpRequest request)
+        {
+            Guid guid;
+            try
+            {
+                guid = new Guid(request.Headers["Authorization"]);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+            if (!_dictionary.ContainsKey(guid)) return null;
+            return _dictionary[guid].User;
+        }
     }
 }

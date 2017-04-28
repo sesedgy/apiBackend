@@ -130,52 +130,11 @@ namespace eRegistration.Controllers
             return BadRequest();
         }
 
-        [HttpGet("")]
-        public object Test()
-        {
-            var disciplines = from u in _context.Discipline
-                                           select new
-                                           {
-                                               u.Name,
-                                               u.Faculty
-                                           };
-      //      List<Discipline> disciplines = _context.Discipline
-      //          .Join(_context.Faculty,         // target
-      //c => c.CategoryId,          // FK
-      //cm => cm.ChildCategoryId,   // PK
-      //(c, cm) => new { Category = c, CategoryMaps = cm })
-      //                                      .Include(u => u.Faculty)
-      //                                      .Select(u => u.Faculty.Name).ToList();
-                                            
-            if (disciplines != null)
-            {
-                //var a = new Discipline();
-                //{
-                //    DisciplineId = new Guid(), CreatedDate = disciplineFromDb.CreatedDate,
-                //    UpdatedDate = disciplineFromDb.UpdatedDate, Name = disciplineFromDb.Name, ShortName = disciplineFromDb.ShortName
-                //};
-                //var c = new List<Discipline>();
-                //_context.Discipline.Add(a);
-                //_context.Discipline.Update(disciplines[1]);
-                //_context.Faculty.Update(facultyFromDb);
-                //_context.SaveChanges();
-                //disciplineFromDb.Faculty = facultyFromDb;
-                //_context.SaveChanges();
-                string json;
-                try
-                {
-                    var serializerSettings = new JsonSerializerSettings { PreserveReferencesHandling = PreserveReferencesHandling.Objects};
-                    json = JsonConvert.SerializeObject(disciplines, Formatting.Indented, serializerSettings);
-                }
-                catch (Exception exception)
-                {
-                    return "Ошибон";
+        //[HttpGet("")]
+        //public object Test()
+        //{
 
-                }
-                return json;
-            }
-            return null;
-        }
+        //}
 
     }
 }

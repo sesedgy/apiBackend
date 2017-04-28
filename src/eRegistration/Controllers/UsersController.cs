@@ -28,8 +28,8 @@ namespace eRegistration.Controllers
             using (var context = _context)
             {
                 userFromDb = (from u in context.Users
-                    where u.Login == user.Login
-                    select u).SingleOrDefault();
+                              where u.Login == user.Login
+                              select u).SingleOrDefault();
             }
             if (userFromDb == null)
             {
@@ -64,8 +64,8 @@ namespace eRegistration.Controllers
         public string[] Authorization(string login, string password)
         {
             User user = (from u in _context.Users
-                    where u.Login == login
-                    select u).SingleOrDefault();
+                         where u.Login == login
+                         select u).SingleOrDefault();
             if (user != null)
             {
                 var modifiedPassword = password + user.HashSalt + _localSalt;
@@ -89,11 +89,11 @@ namespace eRegistration.Controllers
         public bool[] IsLoginAndEmailFree(string login, string email)
         {
             User userFromDb = (from u in _context.Users
-                    where u.Login == login
-                    select u).SingleOrDefault();
+                               where u.Login == login
+                               select u).SingleOrDefault();
             User userFromDb2 = (from u in _context.Users
-                    where u.Email == email
-                    select u).SingleOrDefault();
+                                where u.Email == email
+                                select u).SingleOrDefault();
             var isLoginAndEmailFree = new bool[2];
             isLoginAndEmailFree[0] = userFromDb == null;
             isLoginAndEmailFree[1] = userFromDb2 == null;
@@ -111,8 +111,8 @@ namespace eRegistration.Controllers
         public bool ResetPassword(string email)
         {
             var user = (from u in _context.Users
-                         where u.Email == email
-                         select u).SingleOrDefault();
+                        where u.Email == email
+                        select u).SingleOrDefault();
             var newPassword = RandomString.GetString(8);
             if (user != null)
             {
@@ -153,6 +153,10 @@ namespace eRegistration.Controllers
             {
                 return Unauthorized();
             }
+            if (CookieList.GetInstance().GetUser(Request).Login != login)
+            {
+                return Unauthorized();
+            }
 
             User userFromDb = (from u in _context.Users
                                where u.Login == login
@@ -171,6 +175,10 @@ namespace eRegistration.Controllers
         public IActionResult ChangeLogin(string email, string newLogin)
         {
             if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsAdmin", "IsTeacher", "IsStudentLeader", "IsStudent", "IsAbiturient" }))
+            {
+                return Unauthorized();
+            }
+            if (CookieList.GetInstance().GetUser(Request).Email != email)
             {
                 return Unauthorized();
             }
@@ -196,16 +204,35 @@ namespace eRegistration.Controllers
             {
                 return Unauthorized();
             }
+            if (CookieList.GetInstance().GetUser(Request).Login != login)
+            {
+                return Unauthorized();
+            }
 
             User userFromDb = (from u in _context.Users
                                where u.Login == login
                                select u).SingleOrDefault();
             if (userFromDb != null)
             {
-                userFromDb.Password = newPassword;
-                _context.Update(userFromDb);
-                _context.SaveChanges();
-                return Ok();
+                try
+                {
+                    var modifiedPassword = newPassword + userFromDb.HashSalt + _localSalt;
+                    string newPasswordhash;
+                    using (var sha256 = SHA256.Create())
+                    {
+                        var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(modifiedPassword));
+                        var hash = BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
+                        newPasswordhash = hash;
+                    }
+                    userFromDb.Password = newPasswordhash;
+                    _context.SaveChanges();
+
+                    return Ok();
+                }
+                catch (Exception)
+                {
+                    return BadRequest();
+                }
             }
             return BadRequest();
 
