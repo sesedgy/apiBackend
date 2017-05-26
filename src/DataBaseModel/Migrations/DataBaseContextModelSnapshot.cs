@@ -252,7 +252,8 @@ namespace DataBaseModel.Migrations
 
                     b.Property<DateTime>("CreatedDate");
 
-                    b.Property<Guid?>("FacultyId");
+                    b.Property<Guid?>("FacultyId")
+                        .IsRequired();
 
                     b.Property<string>("Name");
 
@@ -292,7 +293,8 @@ namespace DataBaseModel.Migrations
 
                     b.Property<DateTime>("DateEducationDocument");
 
-                    b.Property<Guid?>("DepartmentId");
+                    b.Property<Guid?>("DepartmentId")
+                        .IsRequired();
 
                     b.Property<string>("DistrictRegistration");
 
@@ -433,10 +435,16 @@ namespace DataBaseModel.Migrations
                     b.Property<Guid>("StudentId")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("CreatedDate");
+
                     b.Property<Guid?>("GroupId");
+
+                    b.Property<DateTime>("UpdatedDate");
 
                     b.Property<Guid?>("UserId")
                         .IsRequired();
+
+                    b.Property<string>("WhoUpdate");
 
                     b.HasKey("StudentId");
 
@@ -547,9 +555,15 @@ namespace DataBaseModel.Migrations
                     b.Property<Guid>("TeachersTypesWorkId")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("CreatedDate");
+
                     b.Property<string>("Name");
 
                     b.Property<string>("PercentLoad");
+
+                    b.Property<DateTime>("UpdatedDate");
+
+                    b.Property<string>("WhoUpdate");
 
                     b.HasKey("TeachersTypesWorkId");
 
@@ -560,6 +574,8 @@ namespace DataBaseModel.Migrations
                 {
                     b.Property<Guid>("TeachersWorkId")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreatedDate");
 
                     b.Property<string>("Curs");
 
@@ -572,6 +588,10 @@ namespace DataBaseModel.Migrations
                     b.Property<Guid?>("TeacherId");
 
                     b.Property<Guid?>("TeachersTypesWorkId");
+
+                    b.Property<DateTime>("UpdatedDate");
+
+                    b.Property<string>("WhoUpdate");
 
                     b.HasKey("TeachersWorkId");
 
@@ -634,7 +654,8 @@ namespace DataBaseModel.Migrations
                 {
                     b.HasOne("DataBaseModel.Models.Department", "Department")
                         .WithMany("Employees")
-                        .HasForeignKey("DepartmentId");
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("DataBaseModel.Models.User", "User")
                         .WithMany()
@@ -652,7 +673,7 @@ namespace DataBaseModel.Migrations
             modelBuilder.Entity("DataBaseModel.Models.Student", b =>
                 {
                     b.HasOne("DataBaseModel.Models.Group")
-                        .WithMany("Student")
+                        .WithMany("Students")
                         .HasForeignKey("GroupId");
 
                     b.HasOne("DataBaseModel.Models.User", "User")

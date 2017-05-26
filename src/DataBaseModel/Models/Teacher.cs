@@ -40,6 +40,7 @@ namespace DataBaseModel.Models
         public DateTime DateEducationDocument { get; set; }
         public string WhoGiveEducationDocument { get; set; }
 
+        [Required]
         public virtual Faculty Faculty { get; set; }                    //Факультет
         public string Speciality { get; set; }                          //Специальность
         public string Scientist { get; set; }                           //Ученая степень

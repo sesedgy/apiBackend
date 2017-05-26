@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using DataBaseModel;
@@ -12,18 +13,17 @@ using Newtonsoft.Json;
 namespace eRegistration.Controllers
 {
     [Route("api/[controller]/[action]")]
-    public class EmployeesController : Controller
+    public class TeachersController : Controller
     {
         private readonly DataBaseContext _context;
         private readonly IHostingEnvironment _appEnvironment;
 
-        public EmployeesController(DataBaseContext context, IHostingEnvironment appEnvironment)
+        public TeachersController(DataBaseContext context, IHostingEnvironment appEnvironment)
         {
             _context = context;
             _appEnvironment = appEnvironment;
         }
 
-        // GET: api/abiturients/get/id
         [HttpGet("{id}")]
         public string Get(string id)
         {
@@ -34,11 +34,11 @@ namespace eRegistration.Controllers
                     return null;
                 }
 
-                var employee = (from u in _context.Employee
-                    where u.EmployeeId == new Guid(id)
+                var teacher = (from u in _context.Teacher
+                    where u.TeacherId == new Guid(id)
                     select new
                     {
-                        u.EmployeeId,
+                        u.TeacherId,
                         u.User,
                         u.LastName,
                         u.FirstName,
@@ -68,8 +68,10 @@ namespace eRegistration.Controllers
                         u.NumberEducationDocument,
                         u.DateEducationDocument,
                         u.WhoGiveEducationDocument,
-                        u.Department,
-                        u.Position,
+                        u.Faculty,
+                        u.Speciality,
+                        u.Scientist,
+                        u.TeachersWorks,
                         u.BeginDate,
                         u.EndDate,
                         u.SalaryPerHour,                  
@@ -82,7 +84,7 @@ namespace eRegistration.Controllers
                     }).SingleOrDefault();
 
                 var serializerSettings = new JsonSerializerSettings { PreserveReferencesHandling = PreserveReferencesHandling.Objects };
-                string json = JsonConvert.SerializeObject(employee, Formatting.Indented, serializerSettings);
+                string json = JsonConvert.SerializeObject(teacher, Formatting.Indented, serializerSettings);
 
                 return json;
             }
@@ -93,17 +95,17 @@ namespace eRegistration.Controllers
         }
 
         [HttpGet("{userName}")]
-        public Employee GetByUser(string userName)
+        public Teacher GetByUser(string userName)
         {
             if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsAdmin" }))
             {
                 return null;
             }
 
-            var employee = (from u in _context.Employee
+            var teacher = (from u in _context.Teacher
                             where u.User.Login == userName
                             select u).SingleOrDefault();
-            return employee;
+            return teacher;
         }
 
         [HttpGet]
@@ -114,83 +116,84 @@ namespace eRegistration.Controllers
                 return null;
             }
 
-            var employees = from u in _context.Employee
+            var teachers = from u in _context.Teacher
                             select new
                             {
-                                u.EmployeeId,
+                                u.TeacherId,
                                 u.LastName,
                                 u.FirstName,
                                 u.MiddleName,
+                                u.Sex,
                                 u.BirthDate,
                                 u.MobilePhone,
-                                u.Department,
-                                u.Position
+                                u.Faculty,
+                                u.Scientist
                             };
 
             var serializerSettings = new JsonSerializerSettings { PreserveReferencesHandling = PreserveReferencesHandling.Objects };
-            var json = JsonConvert.SerializeObject(employees, Formatting.Indented, serializerSettings);
+            var json = JsonConvert.SerializeObject(teachers, Formatting.Indented, serializerSettings);
 
             return json;
         }
 
         [HttpPost]
-        public IActionResult Update([FromBody] Employee employee)
+        public IActionResult Update([FromBody] Teacher teacher)
         {
             if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsAdmin" }))
             {
                 return Unauthorized();
             }
 
-            var employeeFromDb = (from u in _context.Employee
-                                  where u.EmployeeId == employee.EmployeeId
+            var teacherFromDb = (from u in _context.Teacher
+                                  where u.TeacherId == teacher.TeacherId
                                   select u).SingleOrDefault();
-            if (employeeFromDb != null)
+            if (teacherFromDb != null)
             {
-                var department = (from u in _context.Department
-                                      where u.DepartmentId == employee.Department.DepartmentId
+                var faculty = (from u in _context.Faculty
+                                      where u.FacultyId == teacher.Faculty.FacultyId
                                       select u).SingleOrDefault();
 
-                employeeFromDb.LastName = employee.LastName;
-                employeeFromDb.FirstName = employee.FirstName;
-                employeeFromDb.MiddleName = employee.MiddleName;
-                employeeFromDb.BirthDate = employee.BirthDate;
-                employeeFromDb.MobilePhone = employee.MobilePhone;
-                employeeFromDb.Citizenship = employee.Citizenship;
-                employeeFromDb.Sex = employee.Sex;
-                employeeFromDb.PassportSeries = employee.PassportSeries;
-                employeeFromDb.PassportNumber = employee.PassportNumber;
-                employeeFromDb.PassportDate = employee.PassportDate;
-                employeeFromDb.PassportIssueOrg = employee.PassportIssueOrg;
-                employeeFromDb.CountryRegistration = employee.CountryRegistration;
-                employeeFromDb.CityRegistration = employee.CityRegistration;
-                employeeFromDb.RegionRegistration = employee.RegionRegistration;
-                employeeFromDb.DistrictRegistration = employee.DistrictRegistration;
-                employeeFromDb.LocalityRegistration = employee.LocalityRegistration;
-                employeeFromDb.StreetRegistration = employee.StreetRegistration;
-                employeeFromDb.HouseRegistration = employee.HouseRegistration;
-                employeeFromDb.BuildingRegistration = employee.BuildingRegistration;
-                employeeFromDb.HousingRegistration = employee.HousingRegistration;
-                employeeFromDb.FlatRegistration = employee.FlatRegistration;
-                employeeFromDb.IndexRegistration = employee.IndexRegistration;
-                employeeFromDb.INN = employee.INN;
-                employeeFromDb.SNILS = employee.SNILS;
-                employeeFromDb.SeriesEducationDocument = employee.SeriesEducationDocument;
-                employeeFromDb.NumberEducationDocument = employee.NumberEducationDocument;
-                employeeFromDb.DateEducationDocument = employee.DateEducationDocument;
-                employeeFromDb.WhoGiveEducationDocument = employee.WhoGiveEducationDocument;
-                employeeFromDb.Department = department;
-                employeeFromDb.Position = employee.Position;
-                employeeFromDb.BeginDate = employee.BeginDate;
-                employeeFromDb.EndDate = employee.EndDate;
-                employeeFromDb.SalaryPerHour = employee.SalaryPerHour;
-                employeeFromDb.PhotoPath = employee.PhotoPath;
-                employeeFromDb.Status = employee.Status;
-                employeeFromDb.WhoUpdate = employee.WhoUpdate;
-                employeeFromDb.CreatedDate = employee.CreatedDate;
-                employeeFromDb.UpdatedDate = employee.UpdatedDate;
+                teacherFromDb.LastName = teacher.LastName;
+                teacherFromDb.FirstName = teacher.FirstName;
+                teacherFromDb.MiddleName = teacher.MiddleName;
+                teacherFromDb.BirthDate = teacher.BirthDate;
+                teacherFromDb.MobilePhone = teacher.MobilePhone;
+                teacherFromDb.Citizenship = teacher.Citizenship;
+                teacherFromDb.Sex = teacher.Sex;
+                teacherFromDb.PassportSeries = teacher.PassportSeries;
+                teacherFromDb.PassportNumber = teacher.PassportNumber;
+                teacherFromDb.PassportDate = teacher.PassportDate;
+                teacherFromDb.PassportIssueOrg = teacher.PassportIssueOrg;
+                teacherFromDb.CountryRegistration = teacher.CountryRegistration;
+                teacherFromDb.CityRegistration = teacher.CityRegistration;
+                teacherFromDb.RegionRegistration = teacher.RegionRegistration;
+                teacherFromDb.DistrictRegistration = teacher.DistrictRegistration;
+                teacherFromDb.LocalityRegistration = teacher.LocalityRegistration;
+                teacherFromDb.StreetRegistration = teacher.StreetRegistration;
+                teacherFromDb.HouseRegistration = teacher.HouseRegistration;
+                teacherFromDb.BuildingRegistration = teacher.BuildingRegistration;
+                teacherFromDb.HousingRegistration = teacher.HousingRegistration;
+                teacherFromDb.FlatRegistration = teacher.FlatRegistration;
+                teacherFromDb.IndexRegistration = teacher.IndexRegistration;
+                teacherFromDb.INN = teacher.INN;
+                teacherFromDb.SNILS = teacher.SNILS;
+                teacherFromDb.SeriesEducationDocument = teacher.SeriesEducationDocument;
+                teacherFromDb.NumberEducationDocument = teacher.NumberEducationDocument;
+                teacherFromDb.DateEducationDocument = teacher.DateEducationDocument;
+                teacherFromDb.WhoGiveEducationDocument = teacher.WhoGiveEducationDocument;
+                teacherFromDb.Faculty = faculty;
+                teacherFromDb.Scientist = teacher.Scientist;
+                teacherFromDb.BeginDate = teacher.BeginDate;
+                teacherFromDb.EndDate = teacher.EndDate;
+                teacherFromDb.SalaryPerHour = teacher.SalaryPerHour;
+                teacherFromDb.PhotoPath = teacher.PhotoPath;
+                teacherFromDb.Status = teacher.Status;
+                teacherFromDb.WhoUpdate = teacher.WhoUpdate;
+                teacherFromDb.CreatedDate = teacher.CreatedDate;
+                teacherFromDb.UpdatedDate = teacher.UpdatedDate;
 
 
-                _context.Employee.Update(employeeFromDb);
+                _context.Teacher.Update(teacherFromDb);
                 _context.SaveChanges();
                 return Ok();
             }
@@ -198,24 +201,24 @@ namespace eRegistration.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] Employee employee)
+        public IActionResult Create([FromBody] Teacher teacher)
         {
             if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsAdmin" }))
             {
                 return Unauthorized();
             }
 
-            var user = employee.User;
+            var user = teacher.User;
             try
             {
                 var usersController = new UsersController(_context);
                 if (usersController.Create(user))
                 {
-                    var department = (from u in _context.Department
-                                      where u.DepartmentId == employee.Department.DepartmentId
+                    var faculty = (from u in _context.Faculty
+                                      where u.FacultyId == teacher.Faculty.FacultyId
                                       select u).SingleOrDefault();
-                    employee.Department = department;
-                    _context.Employee.Add(employee);
+                    teacher.Faculty = faculty;
+                    _context.Teacher.Add(teacher);
                     _context.SaveChanges();
                     return Ok();
                 }
@@ -235,15 +238,15 @@ namespace eRegistration.Controllers
                 return Unauthorized();
             }
 
-            Employee employeeFromDb = (from u in _context.Employee
-                                            where u.EmployeeId == new Guid(id)
+            Teacher teacherFromDb = (from u in _context.Teacher
+                                            where u.TeacherId == new Guid(id)
                                             select u).SingleOrDefault();
-            if (employeeFromDb != null)
+            if (teacherFromDb != null)
             {
                 User userFromDb = (from u in _context.Users
                                         where u.UserId == new Guid(idUser)
                                         select u).SingleOrDefault();
-                _context.Employee.Remove(employeeFromDb);
+                _context.Teacher.Remove(teacherFromDb);
                 _context.Users.Remove(userFromDb);
                 _context.SaveChanges();
                 return Ok();

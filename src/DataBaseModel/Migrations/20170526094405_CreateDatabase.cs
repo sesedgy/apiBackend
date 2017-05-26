@@ -15,7 +15,7 @@ namespace DataBaseModel.Migrations
                     DepartmentId = table.Column<Guid>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(nullable: true),
-                    UpdatedDate = table.Column<DateTime>(nullable: true),
+                    UpdatedDate = table.Column<DateTime>(nullable: false),
                     WhoUpdate = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -30,7 +30,7 @@ namespace DataBaseModel.Migrations
                     FacultyId = table.Column<Guid>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(nullable: true),
-                    UpdatedDate = table.Column<DateTime>(nullable: true),
+                    UpdatedDate = table.Column<DateTime>(nullable: false),
                     WhoUpdate = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -58,8 +58,11 @@ namespace DataBaseModel.Migrations
                 columns: table => new
                 {
                     TeachersTypesWorkId = table.Column<Guid>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(nullable: true),
-                    PercentLoad = table.Column<string>(nullable: true)
+                    PercentLoad = table.Column<string>(nullable: true),
+                    UpdatedDate = table.Column<DateTime>(nullable: false),
+                    WhoUpdate = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -74,12 +77,12 @@ namespace DataBaseModel.Migrations
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     Email = table.Column<string>(nullable: true),
                     HashSalt = table.Column<string>(nullable: true),
-                    IsOnline = table.Column<bool>(nullable: false, defaultValue: false),
-                    LastActivityDate = table.Column<DateTime>(nullable: true),
+                    IsOnline = table.Column<bool>(nullable: false),
+                    LastActivityDate = table.Column<DateTime>(nullable: false),
                     Login = table.Column<string>(nullable: true),
                     Password = table.Column<string>(nullable: true),
                     Role = table.Column<string>(nullable: true),
-                    UpdatedDate = table.Column<DateTime>(nullable: true),
+                    UpdatedDate = table.Column<DateTime>(nullable: false),
                     WhoUpdate = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -93,11 +96,11 @@ namespace DataBaseModel.Migrations
                 {
                     DisciplineId = table.Column<Guid>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: false),
-                    FacultyId = table.Column<Guid>(nullable: true),
+                    FacultyId = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     ShortName = table.Column<string>(nullable: true),
                     StatusDiscipline = table.Column<string>(nullable: true),
-                    UpdatedDate = table.Column<DateTime>(nullable: true),
+                    UpdatedDate = table.Column<DateTime>(nullable: false),
                     WhoUpdate = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -108,7 +111,7 @@ namespace DataBaseModel.Migrations
                         column: x => x.FacultyId,
                         principalTable: "Faculty",
                         principalColumn: "FacultyId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -116,13 +119,13 @@ namespace DataBaseModel.Migrations
                 columns: table => new
                 {
                     GroupId = table.Column<Guid>(nullable: false),
-                    Begin = table.Column<DateTime>(nullable: true),
+                    Begin = table.Column<DateTime>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     Semester = table.Column<string>(nullable: true),
                     SpecialtyId = table.Column<Guid>(nullable: true),
                     Status = table.Column<string>(nullable: true),
-                    UpdatedDate = table.Column<DateTime>(nullable: true),
+                    UpdatedDate = table.Column<DateTime>(nullable: false),
                     WhoUpdate = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -143,7 +146,7 @@ namespace DataBaseModel.Migrations
                     AbiturientId = table.Column<Guid>(nullable: false),
                     ActualAddress = table.Column<string>(nullable: true),
                     BicOfTheBank = table.Column<string>(nullable: true),
-                    BirthDate = table.Column<DateTime>(nullable: true),
+                    BirthDate = table.Column<DateTime>(nullable: false),
                     BuildingCustomer = table.Column<string>(nullable: true),
                     BuildingLive = table.Column<string>(nullable: true),
                     BuildingRegistration = table.Column<string>(nullable: true),
@@ -157,7 +160,7 @@ namespace DataBaseModel.Migrations
                     CountryLive = table.Column<string>(nullable: true),
                     CountryRegistration = table.Column<string>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: false),
-                    DateEducationDocument = table.Column<DateTime>(nullable: true),
+                    DateEducationDocument = table.Column<DateTime>(nullable: false),
                     DistrictCustomer = table.Column<string>(nullable: true),
                     DistrictLive = table.Column<string>(nullable: true),
                     DistrictRegistration = table.Column<string>(nullable: true),
@@ -202,7 +205,7 @@ namespace DataBaseModel.Migrations
                     MilitaryTicketNumber = table.Column<string>(nullable: true),
                     MilitaryTicketRank = table.Column<string>(nullable: true),
                     MilitaryTicketSeries = table.Column<string>(nullable: true),
-                    MilitaryTicketWhenGive = table.Column<DateTime>(nullable: true),
+                    MilitaryTicketWhenGive = table.Column<DateTime>(nullable: false),
                     MilitaryTicketWhoGive = table.Column<string>(nullable: true),
                     MobilePhone = table.Column<string>(nullable: true),
                     MobilePhoneCustomer = table.Column<string>(nullable: true),
@@ -212,8 +215,8 @@ namespace DataBaseModel.Migrations
                     NameOfTheOrganization = table.Column<string>(nullable: true),
                     Nation = table.Column<string>(nullable: true),
                     NumberEducationDocument = table.Column<string>(nullable: true),
-                    PassportDate = table.Column<DateTime>(nullable: true),
-                    PassportDateCustomer = table.Column<DateTime>(nullable: true),
+                    PassportDate = table.Column<DateTime>(nullable: false),
+                    PassportDateCustomer = table.Column<DateTime>(nullable: false),
                     PassportIssueOrg = table.Column<string>(nullable: true),
                     PassportIssueOrgCustomer = table.Column<string>(nullable: true),
                     PassportNumber = table.Column<string>(nullable: true),
@@ -233,8 +236,8 @@ namespace DataBaseModel.Migrations
                     StreetCustomer = table.Column<string>(nullable: true),
                     StreetLive = table.Column<string>(nullable: true),
                     StreetRegistration = table.Column<string>(nullable: true),
-                    UpdatedDate = table.Column<DateTime>(nullable: true),
-                    UserId = table.Column<Guid>(nullable: true),
+                    UpdatedDate = table.Column<DateTime>(nullable: false),
+                    UserId = table.Column<Guid>(nullable: false),
                     WhoGiveEducationDocument = table.Column<string>(nullable: true),
                     WhoUpdate = table.Column<string>(nullable: true),
                     СertificateOfMilitaryNumber = table.Column<string>(nullable: true),
@@ -257,17 +260,17 @@ namespace DataBaseModel.Migrations
                 columns: table => new
                 {
                     EmployeeId = table.Column<Guid>(nullable: false),
-                    BeginDate = table.Column<DateTime>(nullable: true),
-                    BirthDate = table.Column<DateTime>(nullable: true),
+                    BeginDate = table.Column<DateTime>(nullable: false),
+                    BirthDate = table.Column<DateTime>(nullable: false),
                     BuildingRegistration = table.Column<string>(nullable: true),
                     Citizenship = table.Column<string>(nullable: true),
                     CityRegistration = table.Column<string>(nullable: true),
                     CountryRegistration = table.Column<string>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: false),
-                    DateEducationDocument = table.Column<DateTime>(nullable: true),
-                    DepartmentId = table.Column<Guid>(nullable: true),
+                    DateEducationDocument = table.Column<DateTime>(nullable: false),
+                    DepartmentId = table.Column<Guid>(nullable: false),
                     DistrictRegistration = table.Column<string>(nullable: true),
-                    EndDate = table.Column<DateTime>(nullable: true),
+                    EndDate = table.Column<DateTime>(nullable: false),
                     FirstName = table.Column<string>(nullable: true),
                     FlatRegistration = table.Column<string>(nullable: true),
                     HouseRegistration = table.Column<string>(nullable: true),
@@ -279,7 +282,7 @@ namespace DataBaseModel.Migrations
                     MiddleName = table.Column<string>(nullable: true),
                     MobilePhone = table.Column<string>(nullable: true),
                     NumberEducationDocument = table.Column<string>(nullable: true),
-                    PassportDate = table.Column<DateTime>(nullable: true),
+                    PassportDate = table.Column<DateTime>(nullable: false),
                     PassportIssueOrg = table.Column<string>(nullable: true),
                     PassportNumber = table.Column<string>(nullable: true),
                     PassportSeries = table.Column<string>(nullable: true),
@@ -292,8 +295,8 @@ namespace DataBaseModel.Migrations
                     Sex = table.Column<string>(nullable: true),
                     Status = table.Column<string>(nullable: true),
                     StreetRegistration = table.Column<string>(nullable: true),
-                    UpdatedDate = table.Column<DateTime>(nullable: true),
-                    UserId = table.Column<Guid>(nullable: true),
+                    UpdatedDate = table.Column<DateTime>(nullable: false),
+                    UserId = table.Column<Guid>(nullable: false),
                     WhoGiveEducationDocument = table.Column<string>(nullable: true),
                     WhoUpdate = table.Column<string>(nullable: true)
                 },
@@ -305,7 +308,7 @@ namespace DataBaseModel.Migrations
                         column: x => x.DepartmentId,
                         principalTable: "Department",
                         principalColumn: "DepartmentId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Employee_User_UserId",
                         column: x => x.UserId,
@@ -319,16 +322,16 @@ namespace DataBaseModel.Migrations
                 columns: table => new
                 {
                     TeacherId = table.Column<Guid>(nullable: false),
-                    BeginDate = table.Column<DateTime>(nullable: true),
-                    BirthDate = table.Column<DateTime>(nullable: true),
+                    BeginDate = table.Column<DateTime>(nullable: false),
+                    BirthDate = table.Column<DateTime>(nullable: false),
                     BuildingRegistration = table.Column<string>(nullable: true),
                     Citizenship = table.Column<string>(nullable: true),
                     CityRegistration = table.Column<string>(nullable: true),
                     CountryRegistration = table.Column<string>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: false),
-                    DateEducationDocument = table.Column<DateTime>(nullable: true),
+                    DateEducationDocument = table.Column<DateTime>(nullable: false),
                     DistrictRegistration = table.Column<string>(nullable: true),
-                    EndDate = table.Column<DateTime>(nullable: true),
+                    EndDate = table.Column<DateTime>(nullable: false),
                     FacultyId = table.Column<Guid>(nullable: true),
                     FirstName = table.Column<string>(nullable: true),
                     FlatRegistration = table.Column<string>(nullable: true),
@@ -341,7 +344,7 @@ namespace DataBaseModel.Migrations
                     MiddleName = table.Column<string>(nullable: true),
                     MobilePhone = table.Column<string>(nullable: true),
                     NumberEducationDocument = table.Column<string>(nullable: true),
-                    PassportDate = table.Column<DateTime>(nullable: true),
+                    PassportDate = table.Column<DateTime>(nullable: false),
                     PassportIssueOrg = table.Column<string>(nullable: true),
                     PassportNumber = table.Column<string>(nullable: true),
                     PassportSeries = table.Column<string>(nullable: true),
@@ -355,8 +358,8 @@ namespace DataBaseModel.Migrations
                     Speciality = table.Column<string>(nullable: true),
                     Status = table.Column<string>(nullable: true),
                     StreetRegistration = table.Column<string>(nullable: true),
-                    UpdatedDate = table.Column<DateTime>(nullable: true),
-                    UserId = table.Column<Guid>(nullable: true),
+                    UpdatedDate = table.Column<DateTime>(nullable: false),
+                    UserId = table.Column<Guid>(nullable: false),
                     WhoGiveEducationDocument = table.Column<string>(nullable: true),
                     WhoUpdate = table.Column<string>(nullable: true)
                 },
@@ -382,8 +385,11 @@ namespace DataBaseModel.Migrations
                 columns: table => new
                 {
                     StudentId = table.Column<Guid>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
                     GroupId = table.Column<Guid>(nullable: true),
-                    UserId = table.Column<Guid>(nullable: true)
+                    UpdatedDate = table.Column<DateTime>(nullable: false),
+                    UserId = table.Column<Guid>(nullable: false),
+                    WhoUpdate = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -407,12 +413,15 @@ namespace DataBaseModel.Migrations
                 columns: table => new
                 {
                     TeachersWorkId = table.Column<Guid>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
                     Curs = table.Column<string>(nullable: true),
                     GroupId = table.Column<Guid>(nullable: true),
                     HoursWork = table.Column<string>(nullable: true),
                     Semester = table.Column<string>(nullable: true),
                     TeacherId = table.Column<Guid>(nullable: true),
-                    TeachersTypesWorkId = table.Column<Guid>(nullable: true)
+                    TeachersTypesWorkId = table.Column<Guid>(nullable: true),
+                    UpdatedDate = table.Column<DateTime>(nullable: false),
+                    WhoUpdate = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

@@ -42,8 +42,6 @@ namespace eRegistration.Controllers
             {
                 return null;
             }
-            //List<Discipline> disciplines = (from u in _context.Discipline
-            //    select u).Include(u => u.Faculty).ToList();
             var disciplines = from u in _context.Discipline
                               select new
                               {
@@ -76,8 +74,12 @@ namespace eRegistration.Controllers
                 select u).SingleOrDefault();
             if (disciplineFromDb != null)
             {
+                Faculty facultyFromDb = (from u in _context.Faculty
+                                            where u.FacultyId == discipline.Faculty.FacultyId
+                                            select u).SingleOrDefault();
                 _context.Discipline.Remove(disciplineFromDb);
                 _context.SaveChanges();
+                discipline.Faculty = facultyFromDb;
                 _context.Discipline.Add(discipline);
                 _context.SaveChanges();
                 return Ok();

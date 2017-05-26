@@ -12,5 +12,8 @@ namespace DataBaseModel.Models
         public string Semester { get; set; }                        //Семестр
         public string HoursWork { get; set; }                       //Часы работы
 
+        public string WhoUpdate { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime UpdatedDate { get; set; }                                           
     }
 }

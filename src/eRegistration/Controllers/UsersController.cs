@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -24,16 +25,13 @@ namespace eRegistration.Controllers
         public bool Create(User user)
         {
             //Проверка на наличие такого аккаунта
-            User userFromDb;
-            using (var context = _context)
-            {
-                userFromDb = (from u in context.Users
+            User userFromDb = (from u in _context.Users
                               where u.Login == user.Login
                               select u).SingleOrDefault();
-            }
+            
             if (userFromDb == null)
             {
-                user.HashSalt = new Guid().ToString().Replace("-", "");
+                user.HashSalt = Guid.NewGuid().ToString().Replace("-", "");
                 var modifiedPassword = user.Password + user.HashSalt + _localSalt;
                 using (var sha256 = SHA256.Create())
                 {
@@ -83,6 +81,49 @@ namespace eRegistration.Controllers
             }
             return null;
         }
+
+        [HttpGet("{userName}")]
+        public string[] GetUserInfo(string userName)
+        {
+            if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsAdmin", "IsTeacher", "IsStudentLeader", "IsStudent", "IsAbiturient" }))
+            {
+                return null;
+            }
+
+            var user = (from u in _context.Users
+                    where u.Login == userName
+                    select u).SingleOrDefault();
+            if (user != null)
+            {
+                var userMassive = new string[3];
+                userMassive[0] = user.Login;
+                userMassive[1] = user.Email;
+                switch (user.Role)
+                {
+                    case "IsAbiturient":
+                        userMassive[2] = "Абитуриент";
+                        break;
+                    case "IsStudent":
+                        userMassive[2] = "Студент";
+                        break;
+                    case "IsStudentLeader":
+                        userMassive[2] = "Староста";
+                        break;
+                    case "IsTeacher":
+                        userMassive[2] = "Преподаватель";
+                        break;
+                    case "IsWorker":
+                        userMassive[2] = "Работник";
+                        break;
+                    case "IsAdmin":
+                        userMassive[2] = "Администратор";
+                        break;
+                }
+                return userMassive;
+            }
+            return null;
+        }
+
 
         //api/users/isLoginAndEmailFree/login&email
         [HttpGet("{login}&{email}")]
@@ -155,7 +196,7 @@ namespace eRegistration.Controllers
             }
             if (CookieList.GetInstance().GetUser(Request).Login != login)
             {
-                return Unauthorized();
+                return BadRequest();
             }
 
             User userFromDb = (from u in _context.Users
@@ -180,7 +221,7 @@ namespace eRegistration.Controllers
             }
             if (CookieList.GetInstance().GetUser(Request).Email != email)
             {
-                return Unauthorized();
+                return BadRequest();
             }
 
             User userFromDb = (from u in _context.Users
@@ -206,7 +247,7 @@ namespace eRegistration.Controllers
             }
             if (CookieList.GetInstance().GetUser(Request).Login != login)
             {
-                return Unauthorized();
+                return BadRequest();
             }
 
             User userFromDb = (from u in _context.Users
