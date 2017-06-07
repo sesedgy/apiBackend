@@ -29,7 +29,7 @@ namespace eRegistration.Controllers
         {
             try
             {
-                if (!CookieList.GetInstance().CheckCookie(Request, new[] {"IsWorker", "IsAdmin"}))
+                if (!CookieList.GetInstance().CheckCookie(Request, new[] {"IsHr", "IsAdmin"}))
                 {
                     return null;
                 }
@@ -95,7 +95,7 @@ namespace eRegistration.Controllers
         [HttpGet("{userName}")]
         public Employee GetByUser(string userName)
         {
-            if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsAdmin" }))
+            if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsHr", "IsAdmin" }))
             {
                 return null;
             }
@@ -109,7 +109,7 @@ namespace eRegistration.Controllers
         [HttpGet]
         public string GetAll()
         {
-            if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsAdmin" }))
+            if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsHr", "IsAdmin" }))
             {
                 return null;
             }
@@ -136,7 +136,7 @@ namespace eRegistration.Controllers
         [HttpPost]
         public IActionResult Update([FromBody] Employee employee)
         {
-            if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsAdmin" }))
+            if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsHr", "IsAdmin" }))
             {
                 return Unauthorized();
             }
@@ -200,7 +200,7 @@ namespace eRegistration.Controllers
         [HttpPost]
         public IActionResult Create([FromBody] Employee employee)
         {
-            if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsAdmin" }))
+            if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsHr", "IsAdmin" }))
             {
                 return Unauthorized();
             }
@@ -230,7 +230,7 @@ namespace eRegistration.Controllers
         [HttpGet("{id}&{idUser}")]
         public IActionResult Delete(string id, string idUser)
         {
-            if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsAdmin" }))
+            if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsHr", "IsAdmin" }))
             {
                 return Unauthorized();
             }
@@ -254,7 +254,7 @@ namespace eRegistration.Controllers
         [HttpPost]
         public IActionResult UploadPhoto([FromBody] object[] massive)
         {
-            if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsAdmin" }))
+            if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsHr", "IsAdmin" }))
             {
                 return Unauthorized();
             }

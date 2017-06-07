@@ -29,7 +29,7 @@ namespace eRegistration.Controllers
         {
             try
             {
-                if (!CookieList.GetInstance().CheckCookie(Request, new[] {"IsWorker", "IsAdmin"}))
+                if (!CookieList.GetInstance().CheckCookie(Request, new[] {"IsWorker", "IsHr", "IsAdmin"}))
                 {
                     return null;
                 }
@@ -70,7 +70,8 @@ namespace eRegistration.Controllers
                         u.WhoGiveEducationDocument,
                         u.Faculty,
                         u.Speciality,
-                        u.Scientist,
+                        u.AcademicDegree,
+                        u.AcademicTitle,
                         u.TeachersWorks,
                         u.BeginDate,
                         u.EndDate,
@@ -97,7 +98,7 @@ namespace eRegistration.Controllers
         [HttpGet("{userName}")]
         public Teacher GetByUser(string userName)
         {
-            if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsAdmin" }))
+            if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsTeacher", "IsAdmin" }))
             {
                 return null;
             }
@@ -111,7 +112,7 @@ namespace eRegistration.Controllers
         [HttpGet]
         public string GetAll()
         {
-            if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsAdmin" }))
+            if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsHr", "IsAdmin" }))
             {
                 return null;
             }
@@ -127,7 +128,8 @@ namespace eRegistration.Controllers
                                 u.BirthDate,
                                 u.MobilePhone,
                                 u.Faculty,
-                                u.Scientist
+                                u.AcademicDegree,
+                                u.AcademicTitle
                             };
 
             var serializerSettings = new JsonSerializerSettings { PreserveReferencesHandling = PreserveReferencesHandling.Objects };
@@ -139,7 +141,7 @@ namespace eRegistration.Controllers
         [HttpPost]
         public IActionResult Update([FromBody] Teacher teacher)
         {
-            if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsAdmin" }))
+            if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsHr", "IsAdmin" }))
             {
                 return Unauthorized();
             }
@@ -182,7 +184,8 @@ namespace eRegistration.Controllers
                 teacherFromDb.DateEducationDocument = teacher.DateEducationDocument;
                 teacherFromDb.WhoGiveEducationDocument = teacher.WhoGiveEducationDocument;
                 teacherFromDb.Faculty = faculty;
-                teacherFromDb.Scientist = teacher.Scientist;
+                teacherFromDb.AcademicDegree = teacher.AcademicDegree;
+                teacherFromDb.AcademicTitle = teacher.AcademicTitle;
                 teacherFromDb.BeginDate = teacher.BeginDate;
                 teacherFromDb.EndDate = teacher.EndDate;
                 teacherFromDb.SalaryPerHour = teacher.SalaryPerHour;
@@ -203,7 +206,7 @@ namespace eRegistration.Controllers
         [HttpPost]
         public IActionResult Create([FromBody] Teacher teacher)
         {
-            if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsAdmin" }))
+            if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsHr", "IsAdmin" }))
             {
                 return Unauthorized();
             }
@@ -233,7 +236,7 @@ namespace eRegistration.Controllers
         [HttpGet("{id}&{idUser}")]
         public IActionResult Delete(string id, string idUser)
         {
-            if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsAdmin" }))
+            if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsHr", "IsAdmin" }))
             {
                 return Unauthorized();
             }
@@ -257,7 +260,7 @@ namespace eRegistration.Controllers
         [HttpPost]
         public IActionResult UploadPhoto([FromBody] object[] massive)
         {
-            if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsAdmin" }))
+            if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsHr", "IsAdmin" }))
             {
                 return Unauthorized();
             }

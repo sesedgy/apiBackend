@@ -43,7 +43,8 @@ namespace DataBaseModel.Models
         [Required]
         public virtual Faculty Faculty { get; set; }                    //Факультет
         public string Speciality { get; set; }                          //Специальность
-        public string Scientist { get; set; }                           //Ученая степень
+        public string AcademicDegree { get; set; }                           //Ученая степень
+        public string AcademicTitle { get; set; }                       //Ученое звание
         public DateTime BeginDate { get; set; }                         //Дата начала работы
         public DateTime EndDate { get; set; }
 

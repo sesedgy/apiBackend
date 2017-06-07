@@ -8,8 +8,8 @@ using DataBaseModel;
 namespace DataBaseModel.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    [Migration("20170526094405_CreateDatabase")]
-    partial class CreateDatabase
+    [Migration("20170531154945_CreateDb")]
+    partial class CreateDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -436,16 +436,239 @@ namespace DataBaseModel.Migrations
                     b.Property<Guid>("StudentId")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("ActualAddress");
+
+                    b.Property<string>("BicOfTheBank");
+
+                    b.Property<DateTime>("BirthDate");
+
+                    b.Property<string>("BuildingCustomer");
+
+                    b.Property<string>("BuildingLive");
+
+                    b.Property<string>("BuildingRegistration");
+
+                    b.Property<string>("CheckingAccount");
+
+                    b.Property<string>("Citizenship");
+
+                    b.Property<string>("CityCustomer");
+
+                    b.Property<string>("CityLive");
+
+                    b.Property<string>("CityRegistration");
+
+                    b.Property<string>("CorrespondingAccount");
+
+                    b.Property<string>("CountryCustomer");
+
+                    b.Property<string>("CountryLive");
+
+                    b.Property<string>("CountryRegistration");
+
                     b.Property<DateTime>("CreatedDate");
 
-                    b.Property<Guid?>("GroupId");
+                    b.Property<DateTime>("DateBegin");
+
+                    b.Property<DateTime>("DateEducationDocument");
+
+                    b.Property<DateTime>("DateEnd");
+
+                    b.Property<string>("DisciplineFive");
+
+                    b.Property<string>("DisciplineFour");
+
+                    b.Property<string>("DisciplineMinus");
+
+                    b.Property<string>("DisciplineOne");
+
+                    b.Property<string>("DisciplinePlus");
+
+                    b.Property<string>("DisciplineThree");
+
+                    b.Property<string>("DisciplineTwo");
+
+                    b.Property<string>("DistrictCustomer");
+
+                    b.Property<string>("DistrictLive");
+
+                    b.Property<string>("DistrictRegistration");
+
+                    b.Property<string>("FioRepresentative");
+
+                    b.Property<string>("FirstName");
+
+                    b.Property<string>("FirstNameCustomer");
+
+                    b.Property<string>("FirstNameDP");
+
+                    b.Property<string>("FirstNameFather");
+
+                    b.Property<string>("FirstNameMother");
+
+                    b.Property<string>("FlatCustomer");
+
+                    b.Property<string>("FlatLive");
+
+                    b.Property<string>("FlatRegistration");
+
+                    b.Property<Guid?>("GroupId")
+                        .IsRequired();
+
+                    b.Property<string>("HouseCustomer");
+
+                    b.Property<string>("HouseLive");
+
+                    b.Property<string>("HouseRegistration");
+
+                    b.Property<string>("HousingCustomer");
+
+                    b.Property<string>("HousingLive");
+
+                    b.Property<string>("HousingRegistration");
+
+                    b.Property<string>("IndexLive");
+
+                    b.Property<string>("IndexRegistration");
+
+                    b.Property<string>("Inn");
+
+                    b.Property<string>("InnOfTheBank");
+
+                    b.Property<bool>("IsStarosta");
+
+                    b.Property<string>("Kpp");
+
+                    b.Property<string>("LastName");
+
+                    b.Property<string>("LastNameCustomer");
+
+                    b.Property<string>("LastNameDP");
+
+                    b.Property<string>("LastNameFather");
+
+                    b.Property<string>("LastNameMother");
+
+                    b.Property<string>("LastNameOld");
+
+                    b.Property<string>("LegalAddress");
+
+                    b.Property<string>("LevelEducation");
+
+                    b.Property<string>("LocalityCustomer");
+
+                    b.Property<string>("LocalityLive");
+
+                    b.Property<string>("LocalityRegistration");
+
+                    b.Property<string>("MiddleName");
+
+                    b.Property<string>("MiddleNameCustomer");
+
+                    b.Property<string>("MiddleNameDP");
+
+                    b.Property<string>("MiddleNameFather");
+
+                    b.Property<string>("MiddleNameMother");
+
+                    b.Property<string>("MilitaryTicketCodeVus");
+
+                    b.Property<string>("MilitaryTicketMilitaryOffice");
+
+                    b.Property<string>("MilitaryTicketNumber");
+
+                    b.Property<string>("MilitaryTicketRank");
+
+                    b.Property<string>("MilitaryTicketSeries");
+
+                    b.Property<DateTime>("MilitaryTicketWhenGive");
+
+                    b.Property<string>("MilitaryTicketWhoGive");
+
+                    b.Property<string>("MobilePhone");
+
+                    b.Property<string>("MobilePhoneCustomer");
+
+                    b.Property<string>("MobilePhoneFather");
+
+                    b.Property<string>("MobilePhoneMother");
+
+                    b.Property<string>("NameOfTheBank");
+
+                    b.Property<string>("NameOfTheOrganization");
+
+                    b.Property<string>("Nation");
+
+                    b.Property<string>("NumberEducationDocument");
+
+                    b.Property<DateTime>("PassportDate");
+
+                    b.Property<DateTime>("PassportDateCustomer");
+
+                    b.Property<string>("PassportIssueOrg");
+
+                    b.Property<string>("PassportIssueOrgCustomer");
+
+                    b.Property<string>("PassportNumber");
+
+                    b.Property<string>("PassportNumberCustomer");
+
+                    b.Property<string>("PassportSeries");
+
+                    b.Property<string>("PassportSeriesCustomer");
+
+                    b.Property<string>("PaymentForm");
+
+                    b.Property<string>("PhoneOfTheOrganisation");
+
+                    b.Property<string>("PhotoDiplomPath");
+
+                    b.Property<string>("PhotoPassport1Path");
+
+                    b.Property<string>("PhotoPassport2Path");
+
+                    b.Property<string>("PhotoPassportCustomer1Path");
+
+                    b.Property<string>("PhotoPassportCustomer2Path");
+
+                    b.Property<string>("PhotoPath");
+
+                    b.Property<string>("PhotoСertificateOfMilitary1Path");
+
+                    b.Property<string>("PhotoСertificateOfMilitary2Path");
+
+                    b.Property<string>("RegionCustomer");
+
+                    b.Property<string>("RegionLive");
+
+                    b.Property<string>("RegionRegistration");
+
+                    b.Property<string>("SeriesEducationDocument");
+
+                    b.Property<string>("Sex");
+
+                    b.Property<string>("Status");
+
+                    b.Property<string>("StreetCustomer");
+
+                    b.Property<string>("StreetLive");
+
+                    b.Property<string>("StreetRegistration");
 
                     b.Property<DateTime>("UpdatedDate");
 
                     b.Property<Guid?>("UserId")
                         .IsRequired();
 
+                    b.Property<string>("WhoGiveEducationDocument");
+
                     b.Property<string>("WhoUpdate");
+
+                    b.Property<string>("СertificateOfMilitaryNumber");
+
+                    b.Property<string>("СertificateOfMilitaryOffice");
+
+                    b.Property<string>("СertificateOfMilitarySeries");
 
                     b.HasKey("StudentId");
 
@@ -460,6 +683,10 @@ namespace DataBaseModel.Migrations
                 {
                     b.Property<Guid>("TeacherId")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("AcademicDegree");
+
+                    b.Property<string>("AcademicTitle");
 
                     b.Property<DateTime>("BeginDate");
 
@@ -481,7 +708,8 @@ namespace DataBaseModel.Migrations
 
                     b.Property<DateTime>("EndDate");
 
-                    b.Property<Guid?>("FacultyId");
+                    b.Property<Guid?>("FacultyId")
+                        .IsRequired();
 
                     b.Property<string>("FirstName");
 
@@ -520,8 +748,6 @@ namespace DataBaseModel.Migrations
                     b.Property<string>("SNILS");
 
                     b.Property<string>("SalaryPerHour");
-
-                    b.Property<string>("Scientist");
 
                     b.Property<string>("SeriesEducationDocument");
 
@@ -673,9 +899,10 @@ namespace DataBaseModel.Migrations
 
             modelBuilder.Entity("DataBaseModel.Models.Student", b =>
                 {
-                    b.HasOne("DataBaseModel.Models.Group")
+                    b.HasOne("DataBaseModel.Models.Group", "Group")
                         .WithMany("Students")
-                        .HasForeignKey("GroupId");
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("DataBaseModel.Models.User", "User")
                         .WithMany()
@@ -687,7 +914,8 @@ namespace DataBaseModel.Migrations
                 {
                     b.HasOne("DataBaseModel.Models.Faculty", "Faculty")
                         .WithMany("Teachers")
-                        .HasForeignKey("FacultyId");
+                        .HasForeignKey("FacultyId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("DataBaseModel.Models.User", "User")
                         .WithMany()

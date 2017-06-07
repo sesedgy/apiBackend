@@ -59,6 +59,9 @@ namespace eRegistration
                 case "IsWorker":
                     cookie.IsWorker = true;
                     break;
+                case "IsHr":
+                    cookie.IsHr = true;
+                    break;
                 case "IsAdmin":
                     cookie.IsAdmin = true;
                     break;
@@ -118,6 +121,12 @@ namespace eRegistration
                         break;
                     case "IsWorker":
                         if (cookie.IsWorker)
+                        {
+                            return true;
+                        }
+                        break;
+                    case "IsHr":
+                        if (cookie.IsHr)
                         {
                             return true;
                         }
@@ -182,6 +191,12 @@ namespace eRegistration
                         break;
                     case "IsWorker":
                         if (cookie.IsWorker)
+                        {
+                            return true;
+                        }
+                        break;
+                    case "IsHr":
+                        if (cookie.IsHr)
                         {
                             return true;
                         }

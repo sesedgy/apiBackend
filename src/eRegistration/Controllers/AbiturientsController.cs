@@ -38,6 +38,7 @@ namespace eRegistration.Controllers
             var abiturient = (Abiturient)userAndAbiturient[1];
             var photo = (IFormFile)userAndAbiturient[2];
             user.Role = "IsAbiturient";
+
             try
             {
                 var usersController = new UsersController(_context);

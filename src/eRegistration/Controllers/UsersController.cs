@@ -85,7 +85,7 @@ namespace eRegistration.Controllers
         [HttpGet("{userName}")]
         public string[] GetUserInfo(string userName)
         {
-            if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsAdmin", "IsTeacher", "IsStudentLeader", "IsStudent", "IsAbiturient" }))
+            if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsHr", "IsAdmin", "IsTeacher", "IsStudentLeader", "IsStudent", "IsAbiturient" }))
             {
                 return null;
             }
@@ -114,6 +114,9 @@ namespace eRegistration.Controllers
                         break;
                     case "IsWorker":
                         userMassive[2] = "Работник";
+                        break;
+                    case "IsHr":
+                        userMassive[2] = "Сотрудник отдела кадров";
                         break;
                     case "IsAdmin":
                         userMassive[2] = "Администратор";
@@ -190,7 +193,7 @@ namespace eRegistration.Controllers
         [HttpGet("{login}&{newEmail}")]
         public IActionResult ChangeEmail(string login, string newEmail)
         {
-            if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsAdmin", "IsTeacher", "IsStudentLeader", "IsStudent", "IsAbiturient" }))
+            if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsHr", "IsAdmin", "IsTeacher", "IsStudentLeader", "IsStudent", "IsAbiturient" }))
             {
                 return Unauthorized();
             }
@@ -215,7 +218,7 @@ namespace eRegistration.Controllers
         [HttpGet("{email}&{newLogin}")]
         public IActionResult ChangeLogin(string email, string newLogin)
         {
-            if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsAdmin", "IsTeacher", "IsStudentLeader", "IsStudent", "IsAbiturient" }))
+            if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsHr", "IsAdmin", "IsTeacher", "IsStudentLeader", "IsStudent", "IsAbiturient" }))
             {
                 return Unauthorized();
             }
@@ -241,7 +244,7 @@ namespace eRegistration.Controllers
         [HttpGet("{login}&{newPassword}")]
         public IActionResult ChangePassword(string login, string newPassword)
         {
-            if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsAdmin", "IsTeacher", "IsStudentLeader", "IsStudent", "IsAbiturient" }))
+            if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsHr", "IsAdmin", "IsTeacher", "IsStudentLeader", "IsStudent", "IsAbiturient" }))
             {
                 return Unauthorized();
             }

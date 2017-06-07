@@ -13,6 +13,7 @@ namespace DataBaseModel.Models
         public bool IsStudentLeader { get; set; }
         public bool IsTeacher { get; set; }
         public bool IsWorker { get; set; }
+        public bool IsHr { get; set; }
         public bool IsAdmin { get; set; }
     }
 }
