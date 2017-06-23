@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using OfficeOpenXml;
 
 
 namespace eRegistration.Controllers
@@ -287,5 +288,184 @@ namespace eRegistration.Controllers
             }
             return BadRequest();
         }
+
+        [HttpPost]
+        public IActionResult UploadWorkVolume(IFormFileCollection files)
+        {
+            if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsAdmin" }))
+            {
+                return Unauthorized();
+            }
+
+            if (files != null)
+            {
+                try
+                {
+                    var volumeFile = files[0];
+                    var groupTeacherFile = files[1];
+                    var filePath1 = _appEnvironment.ContentRootPath + "\\Files\\Temporary\\" + volumeFile.FileName;
+                    using (var fileStream = new FileStream(filePath1, FileMode.Create))
+                    {
+                        volumeFile.CopyTo(fileStream);
+                    }
+                    var filePath2 = _appEnvironment.ContentRootPath + "\\Files\\Temporary\\" + groupTeacherFile.FileName;
+                    using (var fileStream = new FileStream(filePath2, FileMode.Create))
+                    {
+                        groupTeacherFile.CopyTo(fileStream);
+                    }
+                    try
+                    {
+                        var groupFromFileName = volumeFile.FileName.Replace(".xlsx", "").Replace(".xls", "").Split(',');
+                        var package = new ExcelPackage(new FileInfo(filePath1));
+                        var package2 = new ExcelPackage(new FileInfo(filePath2));
+
+
+                        foreach (var semester in package.Workbook.Worksheets)
+                        {
+                            var semesterString =
+                                semester.Cells[4, 3].Value.ToString()
+                                    .Substring(7).Replace(" семестр", "").Trim();
+                            var curs = semester.Cells[4, 3].Value.ToString().Substring(0, 1);
+                            for (int j = 7; j <= semester.Dimension.End.Row - 2; j++)
+                            {
+                                var discipline = semester.Cells[j, 2].Value.ToString();
+                                /////////////////////////////////////////////////////// 
+                                // Парсим документ с преподавателями и группами
+                                var teacher = new Teacher();     
+                                var groupsList = new List<Group>();
+                                ExcelWorksheet list = null;
+                                foreach (var semester2 in package2.Workbook.Worksheets)
+                                {
+                                    list = semester2;
+                                    break;
+                                }
+                                var flagForExit = false;
+                                for (int i2 = 1; i2 < list.Dimension.End.Row; i2++)
+                                {
+                                    //Ищем все дисциплины что совпадают с текущей
+                                    if (list.Cells[i2, 5].Value == null) { continue; }
+                                    if (discipline == list.Cells[i2, 5].Value.ToString())
+                                    {
+                                        //Выделяем группы занимающиеся по этой дисцплине
+                                        var groupsFromList = list.Cells[i2, 3].Value.ToString().Replace(" ", "").Split(',');  //TODO проверить в условиях одной группы и нескольких
+                                        for (int iGr = 0; iGr < groupFromFileName.Length; iGr++)
+                                        {
+                                            for (int iGr2 = 0; iGr2 < groupsFromList.Length; iGr2++)
+                                            {
+                                                //Проверяем соответствует ли хоть одна группа выбранным группам
+                                                if (groupFromFileName[iGr] == groupsFromList[iGr2])
+                                                {
+                                                    groupsList.Add((from u in _context.Group
+                                                               where u.Name == groupFromFileName[iGr]
+                                                               select u).SingleOrDefault());
+                                                    teacher = (from u in _context.Teacher
+                                                               where u.LastName + " " + u.FirstName + " " + u.MiddleName == list.Cells[i2, 4].Value.ToString().Trim()
+                                                               select u).SingleOrDefault();
+                                                    flagForExit = true;
+                                                }
+                                            }    
+                                        }
+                                    }
+                                    if(flagForExit) { break;}                                  
+                                }
+                                //////////////////////////////////////////////////////////
+                                for (int i = 5; i <= 20; i++)
+                                {
+                                    if (semester.Cells[j, i].Value != null)
+                                    {
+                                        string typeWorkFromDoc = semester.Cells[6, i].Value.ToString().Trim();
+                                        if (typeWorkFromDoc.IndexOf('(') != -1)
+                                        {
+                                            typeWorkFromDoc = typeWorkFromDoc.Remove(typeWorkFromDoc.IndexOf('(') - 1);// Будет ошибка если в названии типа занятий будут еще скобки помимо коэффициента
+                                        }
+                                        typeWorkFromDoc = char.ToUpper(typeWorkFromDoc[0]) + typeWorkFromDoc.Substring(1);
+                                        switch (typeWorkFromDoc)
+                                        {
+                                            case "Из них лекционные":
+                                                typeWorkFromDoc = "Лекции";
+                                                break;
+                                        }
+                                        var typeWork = (from u in _context.TeachersTypesWork
+                                                        where u.Name == typeWorkFromDoc
+                                                        select u).SingleOrDefault();
+                                        for (int k = 0; k < groupsList.Count; k++)
+                                        {
+                                            var teacherWork = new TeachersWork()
+                                            {
+                                                TeachersWorkId = Guid.NewGuid(),
+                                                Teacher = teacher,
+                                                TeachersTypesWork = typeWork,
+                                                Group = groupsList[k],
+                                                Semester = semesterString,
+                                                Curs = curs,
+                                                HoursWork = semester.Cells[j, i].Value.ToString(),
+                                                WhoUpdate = "auto",
+                                                CreatedDate = DateTime.Now,
+                                                UpdatedDate = DateTime.Now
+                                            };
+                                            _context.TeachersWork.Add(teacherWork);               
+                                        }
+                                        _context.SaveChanges();//TODO Проверить возможно ли множественное добавление
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        System.IO.File.Delete(filePath1);
+                        System.IO.File.Delete(filePath2);
+                        return BadRequest();
+                    }
+
+                    System.IO.File.Delete(filePath1);
+                    System.IO.File.Delete(filePath2);
+                }
+                catch (Exception)
+                {
+                    return BadRequest();
+
+                }
+            }
+            return Ok();
+        }
+
+        [HttpGet("{id}")]
+        public string GetTeachersWorks(string id)
+        {
+            try
+            {
+                if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsWorker", "IsHr", "IsAdmin" }))
+                {
+                    return null;
+                }
+
+                var teacherWork = (from u in _context.TeachersWork
+                                   where u.Teacher.TeacherId == new Guid(id)
+                                   select new
+                                   {
+                                       u.TeachersWorkId,
+                                       u.Teacher,
+                                       u.TeachersTypesWork,
+                                       u.Group,
+                                       u.Curs,
+                                       u.Semester,
+                                       u.HoursWork,
+                                       u.WhoUpdate,
+                                       u.CreatedDate,
+                                       u.UpdatedDate
+                                   }).ToList();
+
+                var serializerSettings = new JsonSerializerSettings { PreserveReferencesHandling = PreserveReferencesHandling.Objects };
+                string json = JsonConvert.SerializeObject(teacherWork, Formatting.Indented, serializerSettings);
+
+                return json;
+            }
+            catch (Exception exception)
+            {
+                return exception.ToString();
+            }
+        }
+
     }
 }
