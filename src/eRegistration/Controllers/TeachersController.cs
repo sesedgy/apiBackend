@@ -259,34 +259,43 @@ namespace eRegistration.Controllers
         }
 
         [HttpPost]
-        public IActionResult UploadPhoto([FromBody] object[] massive)
+        public string UploadPhoto(IFormFile file)
         {
             if (!CookieList.GetInstance().CheckCookie(Request, new[] { "IsHr", "IsAdmin" }))
             {
-                return Unauthorized();
+                //return Unauthorized();
             }
 
-            var uploadedFile = (IFormFile)massive[0];
-            var id = new Guid((string)massive[1]);
-            if (uploadedFile != null)
+            if (file != null)
             {
-                string path = _appEnvironment.WebRootPath + "eAcademy/Images/Photo/Employees/" + id;
-                using (var fileStream = new FileStream(path, FileMode.Create))
+                try
                 {
-                    uploadedFile.CopyTo(fileStream);
+                    var photo = file;
+                    var id = new Guid(photo.FileName.Remove(36)); //TODO  
+                    var filePath = "\\Files\\Images\\Photo\\Teachers\\" + photo.FileName;
+                    using (var fileStream = new FileStream(_appEnvironment.ContentRootPath + filePath, FileMode.Create))
+                    {
+                        photo.CopyTo(fileStream);
+                    }
+
+                    var teacherFromDb = (from u in _context.Teacher
+                        where u.TeacherId == id
+                        select u).SingleOrDefault();
+                    if (teacherFromDb != null)
+                    {
+                        teacherFromDb.PhotoPath = filePath;
+                        _context.Update(teacherFromDb);
+                        _context.SaveChanges();
+                        //return Ok();
+                    }
                 }
-                var employeeFromDb = (from u in _context.Employee
-                                      where u.EmployeeId == id
-                                      select u).SingleOrDefault();
-                if (employeeFromDb != null)
+                catch (Exception e)
                 {
-                    employeeFromDb.PhotoPath = path;
-                    _context.Update(employeeFromDb);
-                    _context.SaveChanges();
-                    return Ok();
+                    return e.ToString();
                 }
             }
-            return BadRequest();
+            return "PUK";
+            //return BadRequest();
         }
 
         [HttpPost]
